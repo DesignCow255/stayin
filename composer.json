@@ -1,0 +1,46 @@
+{
+    "name": "stayin/marketplace",
+    "description": "StayIn — Tanzania-first accommodation marketplace. Framework-free PHP 8.3 + MySQL 8 + vanilla JS PWA.",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": ">=8.3",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-openssl": "*",
+        "ext-fileinfo": "*"
+    },
+    "suggest": {
+        "ext-gd": "Required for server-side image resizing / WebP generation",
+        "ext-intl": "Improved locale formatting",
+        "phpmailer/phpmailer": "SMTP transport for production email (optional; a native SMTP transport is bundled)"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        },
+        "files": [
+            "app/Support/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "platform-check": true
+    },
+    "scripts": {
+        "serve": "php -S 127.0.0.1:8888 -t public public/index.php",
+        "migrate": "php cli/stayin.php migrate",
+        "seed": "php cli/stayin.php seed",
+        "test": "php tests/run.php"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

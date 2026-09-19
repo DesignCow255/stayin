@@ -1,0 +1,42 @@
+# ---- Secrets / environment ----
+.env
+.env.local
+.env.*.local
+storage/private/*
+!storage/private/.gitkeep
+
+# ---- Composer / vendor ----
+/vendor/
+composer.phar
+
+# ---- Database backups (may contain user data — never commit) ----
+database/backups/*
+!database/backups/.gitkeep
+
+# ---- Runtime storage ----
+storage/logs/*
+!storage/logs/.gitkeep
+storage/cache/*
+!storage/cache/.gitkeep
+storage/sessions/*
+!storage/sessions/.gitkeep
+storage/framework/cache/*
+storage/framework/views/*
+!storage/framework/.gitkeep
+
+# ---- Public uploads (user content) ----
+public/assets/uploads/*
+!public/assets/uploads/.gitkeep
+
+# ---- IDE / OS ----
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ---- Test artifacts ----
+.phpunit.result.cache
+/tmp/

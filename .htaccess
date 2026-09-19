@@ -1,0 +1,17 @@
+# ---------------------------------------------------------------------------
+# StayIn — deny all web access to this directory.
+#
+# This file is a second line of defence. The primary defence is deploying with
+# the Apache document root pointed at /public. See docs/DEPLOYMENT.md.
+# ---------------------------------------------------------------------------
+
+# Apache 2.4+
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+
+# Apache 2.2
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>
