@@ -34,7 +34,12 @@ final class Config
 
     public static function set(string $key, mixed $value): void
     {
-        self::$items[$key] = $value;
+        $cursor =& self::$items;
+        foreach (explode('.', $key) as $segment) {
+            if (!isset($cursor[$segment]) || !is_array($cursor[$segment])) $cursor[$segment] = [];
+            $cursor =& $cursor[$segment];
+        }
+        $cursor = $value;
     }
 
     public static function get(string $key, mixed $default = null): mixed

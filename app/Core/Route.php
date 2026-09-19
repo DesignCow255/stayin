@@ -20,7 +20,7 @@ final class Route
     public function __construct(
         public readonly array $methods,
         public readonly string $pattern,
-        public readonly string $regex,
+        public string $regex,
         public readonly array $paramNames,
         public readonly mixed $handler,
         public readonly array $defaults = []

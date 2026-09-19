@@ -42,7 +42,8 @@ final class Response
 
     public static function redirect(string $location, int $status = 302): self
     {
-        return new self('', $status, ['Location' => $location]);
+        if (str_starts_with($location, '/') && !str_starts_with($location, '//')) $location = url($location);
+        return new self('', $status, ['Location' => $location, 'Cache-Control' => 'no-store']);
     }
 
     public static function text(string $content, int $status = 200): self

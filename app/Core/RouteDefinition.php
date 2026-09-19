@@ -20,6 +20,12 @@ final class RouteDefinition
         return $this;
     }
 
+    public function where(array $constraints): self
+    {
+        $this->router->constrain($this->index, $constraints);
+        return $this;
+    }
+
     public function name(string $name): self
     {
         $this->router->nameRoute($this->index, $name);

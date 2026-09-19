@@ -4,20 +4,30 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use RuntimeException;
 use Throwable;
 
 /**
  * HTTP exception carrying a status code, used by middleware and policies.
  */
-class HttpException extends \RuntimeException
+class HttpException extends RuntimeException
 {
+    /**
+     * @param array<string, string> $headers
+     */
     public function __construct(
         public readonly int $status,
         string $message = '',
         public readonly ?string $redirectTo = null,
+        public readonly array $headers = [],
         ?Throwable $previous = null
     ) {
         parent::__construct($message !== '' ? $message : ('HTTP ' . $status), $status, $previous);
+    }
+
+    public static function badRequest(string $message = 'The request could not be understood.'): self
+    {
+        return new self(400, $message);
     }
 
     public static function forbidden(string $message = 'You do not have permission to perform this action.'): self

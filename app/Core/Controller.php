@@ -14,7 +14,7 @@ abstract class Controller
      */
     protected function view(string $view, array $data = [], int $status = 200): Response
     {
-        return Response::html(View::render($view, $data), $status);
+        return View::render($view, $data)->withStatus($status);
     }
 
     /**
@@ -32,7 +32,7 @@ abstract class Controller
 
     protected function redirectToRoute(string $name, array $params = []): Response
     {
-        return Response::redirect(App::router()->route($name, $params));
+        return Response::redirect(App::router()->url($name, $params));
     }
 
     protected function back(string $fallback = '/'): Response
@@ -64,11 +64,11 @@ abstract class Controller
             $template = 'errors/404';
         }
 
-        return Response::html(View::render($template, [
+        return View::render($template, [
             'title' => $message,
             'message' => $message,
             'status' => $status,
             ...$extra,
-        ]), $status);
+        ])->withStatus($status);
     }
 }

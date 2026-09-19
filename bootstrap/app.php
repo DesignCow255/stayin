@@ -48,6 +48,7 @@ foreach (
     [
         'app', 'database', 'booking', 'currency', 'locale', 'mail',
         'security', 'middleware', 'features', 'integrations', 'payments', 'seo',
+        'auth', 'pricing', 'support', 'display',
     ] as $configFile
 ) {
     Config::load($configFile, $basePath . '/config/' . $configFile . '.php');

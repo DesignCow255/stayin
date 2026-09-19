@@ -106,7 +106,7 @@ final class ErrorHandler
                     'exception' => $exception,
                     'metaTitle' => (self::TITLES[$status] ?? 'Error') . ' — StayIn',
                     'noindex' => true,
-                ], 'layouts/app');
+                ], 'layouts/app')->withStatus($status);
             }
         } catch (Throwable) {
             // fall through to plain page

@@ -1,0 +1,5 @@
+No syntax errors detected in app/Middleware/CheckMaintenanceMode.php
+No syntax errors detected in app/Middleware/ThrottleRequests.php
+No syntax errors detected in app/Middleware/SetLocale.php
+No syntax errors detected in app/Middleware/VerifyCsrfToken.php
+No syntax errors detected in app/Middleware/TrackLastActivity.php

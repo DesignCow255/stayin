@@ -1,0 +1,81 @@
+/* ===========================================================================
+   StayIn responsive refinements — breakpoints beyond the component defaults.
+   Breakpoints: 320 / 360 / 390 / 430 / 720 / 860 / 1100 / 1440
+   =========================================================================== */
+
+/* Extra-small phones */
+@media (max-width: 360px) {
+    :root {
+        --nav-height: 60px;
+    }
+
+    h1 { font-size: clamp(1.8rem, 1.4rem + 2vw, 2.4rem); }
+}
+
+/* Phones landscape / small tablets */
+@media (min-width: 720px) {
+    .site-main {
+        padding-block: var(--space-7);
+    }
+}
+
+/* Desktop navigation */
+@media (min-width: 861px) {
+    .nav {
+        gap: var(--space-1);
+    }
+}
+
+/* Wide desktops: widen the container a touch */
+@media (min-width: 1440px) {
+    :root {
+        --container: 1320px;
+    }
+}
+
+/* Ensure the sticky mobile CTA (booking) clears the bottom nav */
+body {
+    padding-block-end: env(safe-area-inset-bottom);
+}
+
+/* Bottom navigation (mobile) -------------------------------------------------- */
+.bottom-nav {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    display: none;
+    grid-template-columns: repeat(5, 1fr);
+    background: color-mix(in srgb, var(--bg-elevated) 94%, transparent);
+    backdrop-filter: blur(12px);
+    border-block-start: 1px solid var(--border);
+    z-index: var(--z-sticky);
+    padding-block: 6px calc(6px + env(safe-area-inset-bottom));
+}
+
+.bottom-nav a {
+    display: grid;
+    place-items: center;
+    gap: 2px;
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    padding: 6px 4px;
+    border-radius: var(--radius-md);
+}
+
+.bottom-nav a i {
+    font-size: 1.1rem;
+}
+
+.bottom-nav a[aria-current='page'] {
+    color: var(--brand);
+}
+
+@media (max-width: 720px) {
+    .bottom-nav {
+        display: grid;
+    }
+
+    .site-main {
+        padding-block-end: 76px; /* clearance for bottom nav */
+    }
+}

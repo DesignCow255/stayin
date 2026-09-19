@@ -4,7 +4,7 @@
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /stayin/public/
+
 
     # Never serve dotfiles (.env, .git, ...)
     RewriteRule "(^|/)\.(?!well-known)" - [F,L]

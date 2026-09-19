@@ -32,6 +32,40 @@ final class Container
     }
 
     /**
+     * Static accessor used by the router/pipeline hot path. Middleware aliases
+     * (e.g. "csrf", "auth", "throttle:api") are resolved through config.
+     */
+    public static function get(string $abstract): mixed
+    {
+        $container = self::instance();
+
+        if (!class_exists($abstract) && !isset($container->bindings[$abstract])) {
+            [$alias, $param] = array_pad(explode(':', $abstract, 2), 2, null);
+            $aliases = (array) Config::get('middleware.aliases', []);
+
+            if (isset($aliases[$alias])) {
+                $class = $aliases[$alias];
+                // Carry the parameter (e.g. throttle:api) on the instance for
+                // middleware that needs it.
+                if ($param !== null) {
+                    return $container->instances['alias:' . $abstract] ??= $container->make($class);
+                }
+                return $container->make($class);
+            }
+        }
+
+        return $container->make($abstract);
+    }
+
+    /**
+     * Static singleton registration used at boot time.
+     */
+    public static function singleton(string $abstract, callable|string $concrete): void
+    {
+        self::instance()->bind($abstract, $concrete, true);
+    }
+
+    /**
      * @param callable(self):mixed|class-string $concrete
      */
     public function bind(string $abstract, callable|string $concrete, bool $shared = true): void
@@ -40,7 +74,10 @@ final class Container
         unset($this->instances[$abstract]);
     }
 
-    public function instance(string $abstract, mixed $instance): void
+    /**
+     * Register a pre-built instance (object already constructed).
+     */
+    public function set(string $abstract, mixed $instance): void
     {
         $this->instances[$abstract] = $instance;
     }

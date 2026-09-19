@@ -147,6 +147,8 @@ final class Migrator
 
         $result['pending'] = count($pending);
 
+        if ($result['modified'] !== []) throw new \RuntimeException('Applied migration checksum changed; refusing further migrations.');
+
         if ($dryRun) {
             return $result;
         }
