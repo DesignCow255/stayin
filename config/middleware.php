@@ -14,6 +14,8 @@ return [
         'verified' => App\Middleware\EnsureEmailVerified::class,
         'csrf' => App\Middleware\VerifyCsrfToken::class,
         'role' => App\Middleware\EnsureRole::class,
+        'role_home' => App\Middleware\RedirectToRoleHome::class,
+        'guest_only' => App\Middleware\EnsureGuest::class,
         'permission' => App\Middleware\EnsurePermission::class,
         'host' => App\Middleware\EnsureHost::class,
         'admin' => App\Middleware\EnsureAdminAccess::class,

@@ -1,138 +1,353 @@
 /* ===========================================================================
-   StayIn design tokens — dark-first, CSS custom properties only.
+   StayIn design tokens — architectural, editorial, calm.
+
+   Layer 1 (PALETTE / SCALE) : the new system.
+   Layer 2 (LEGACY ALIASES)  : every variable name the pre-existing stylesheets
+                               and inline view styles reference, mapped onto
+                               Layer 1 so the whole app inherits the new
+                               language at once. Nothing is removed — only
+                               values changed.
    =========================================================================== */
 
 :root {
-    /* Brand */
-    --brand: #f2b56b;
-    --brand-strong: #e09742;
-    --brand-soft: rgba(242, 181, 107, 0.16);
-    --accent: #3fbf9f;
+    /* ---------------------------------------------------------------------
+       Colour — light mode (warm ivory)
+       --------------------------------------------------------------------- */
+    --si-bg: #F7F7F3;
+    --si-surface: #FFFFFF;
+    --si-surface-elevated: #FBFBF8;
+    --si-surface-sunken: #F0F0EA;
+    --si-text: #111411;
+    --si-text-muted: #666B66;
+    --si-text-faint: #8B908B;
+    --si-border: rgba(17, 20, 17, .10);
+    --si-border-strong: rgba(17, 20, 17, .22);
 
-    /* Dark theme (default) */
-    --bg: #0d1017;
-    --bg-elevated: #141926;
-    --bg-sunken: #090b10;
-    --surface: #171d2b;
-    --surface-2: #1d2436;
-    --border: rgba(148, 163, 199, 0.16);
-    --border-strong: rgba(148, 163, 199, 0.30);
+    /* Brand — architectural forest green */
+    --si-brand: #174A3A;
+    --si-brand-hover: #10382C;
+    --si-brand-soft: rgba(23, 74, 58, .08);
+    --si-brand-contrast: #FFFFFF;
 
-    --text: #eef1f8;
-    --text-muted: #a4adc4;
-    --text-faint: #6d7690;
+    /* Premium accent — champagne gold, used sparingly */
+    --si-premium: #C7A96B;
+    --si-premium-soft: rgba(199, 169, 107, .16);
+    --si-premium-contrast: #241B07;
 
-    /* Status */
-    --success: #3fbf7f;
-    --success-soft: rgba(63, 191, 127, 0.14);
-    --warning: #f2b56b;
-    --warning-soft: rgba(242, 181, 107, 0.14);
-    --danger: #e5606c;
-    --danger-soft: rgba(229, 96, 108, 0.14);
-    --info: #5aa7e8;
-    --info-soft: rgba(90, 167, 232, 0.14);
+    /* Semantic */
+    --si-success: #1F7A4D;
+    --si-success-soft: rgba(31, 122, 77, .10);
+    --si-warning: #B37A00;
+    --si-warning-soft: rgba(179, 122, 0, .12);
+    --si-danger: #B3261E;
+    --si-danger-soft: rgba(179, 38, 30, .10);
+    --si-info: #1E5AA8;
+    --si-info-soft: rgba(30, 90, 168, .10);
 
-    /* Typography */
-    --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --font-display: "Fraunces", Georgia, "Times New Roman", serif;
-    --text-xs: 0.75rem;
-    --text-sm: 0.875rem;
-    --text-md: 1rem;
-    --text-lg: 1.125rem;
-    --text-xl: clamp(1.25rem, 1.1rem + 0.8vw, 1.5rem);
-    --text-2xl: clamp(1.5rem, 1.2rem + 1.6vw, 2.1rem);
-    --text-3xl: clamp(2rem, 1.4rem + 3vw, 3.2rem);
+    /* Overlays & inverse surfaces */
+    --si-overlay: rgba(10, 12, 10, .52);
+    --si-inverse-bg: #111411;
+    --si-inverse-text: #F6F7F4;
 
-    /* Spacing scale */
-    --space-1: 0.25rem;
-    --space-2: 0.5rem;
-    --space-3: 0.75rem;
-    --space-4: 1rem;
-    --space-5: 1.5rem;
-    --space-6: 2rem;
-    --space-7: 3rem;
-    --space-8: 4rem;
+    /* ---------------------------------------------------------------------
+       Type — Inter first, self-hosted Source Sans 3 as the guaranteed
+       fallback: no external request, so `font-src 'self' data:` holds.
+       --------------------------------------------------------------------- */
+    --si-font-sans: "Inter", "Manrope", "Plus Jakarta Sans", "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --si-font-display: "Manrope", "Plus Jakarta Sans", "Source Sans 3", system-ui, -apple-system, sans-serif;
+    --si-font-serif: "Instrument Serif", "Fraunces", Georgia, "Times New Roman", serif;
+    --si-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
 
-    /* Radii */
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 18px;
-    --radius-xl: 26px;
-    --radius-full: 999px;
+    --si-weight-light: 300;
+    --si-weight-regular: 400;
+    --si-weight-medium: 500;
+    --si-weight-semibold: 600;
+    --si-weight-bold: 700;
+    --si-weight-heavy: 800;
 
-    /* Shadows */
-    --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.30);
-    --shadow-2: 0 6px 20px rgba(0, 0, 0, 0.35);
-    --shadow-3: 0 14px 44px rgba(0, 0, 0, 0.45);
+    --si-text-xs: .75rem;
+    --si-text-sm: .8125rem;
+    --si-text-base: .9375rem;
+    --si-text-md: 1rem;
+    --si-text-lg: 1.0625rem;
+    --si-text-xl: clamp(1.125rem, 1.05rem + .35vw, 1.25rem);
+    --si-text-2xl: clamp(1.375rem, 1.2rem + .8vw, 1.75rem);
+    --si-text-3xl: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
+    --si-text-4xl: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+    --si-text-hero: clamp(2.25rem, 4vw + 1rem, 4rem);
 
-    /* Transitions */
-    --transition-fast: 140ms cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-base: 240ms cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-slow: 420ms cubic-bezier(0.22, 1, 0.36, 1);
+    --si-leading-tight: 1.08;
+    --si-leading-snug: 1.25;
+    --si-leading-normal: 1.55;
+    --si-leading-relaxed: 1.7;
 
-    /* Z-index layers */
-    --z-below: -1;
-    --z-base: 0;
-    --z-sticky: 100;
-    --z-dropdown: 200;
-    --z-overlay: 300;
-    --z-modal: 400;
-    --z-toast: 500;
+    --si-tracking-tight: -.02em;
+    --si-tracking-snug: -.01em;
+    --si-tracking-wide: .08em;
+    --si-tracking-wider: .14em;
+
+    /* ---------------------------------------------------------------------
+       Spacing — 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 / 128
+       --------------------------------------------------------------------- */
+    --si-space-1: .25rem;
+    --si-space-2: .5rem;
+    --si-space-3: .75rem;
+    --si-space-4: 1rem;
+    --si-space-5: 1.5rem;
+    --si-space-6: 2rem;
+    --si-space-7: 3rem;
+    --si-space-8: 4rem;
+    --si-space-9: 6rem;
+    --si-space-10: 8rem;
+
+    --si-gutter: clamp(1rem, 3vw, 2.5rem);
+    --si-section: clamp(3rem, 2rem + 4vw, 6.5rem);
+
+                /* ---------------------------------------------------------------------
+       Radius — reduced by ~85% for a premium, near-flat aesthetic.
+       Original: sm 8 · md 12 · lg 18 · xl 24 · pill 999.
+       --------------------------------------------------------------------- */
+    --si-r-sm: 2px;
+    --si-r-md: 3px;
+    --si-r-lg: 4px;
+    --si-r-xl: 5px;
+    --si-r-pill: 30px;
+
+    /* ---------------------------------------------------------------------
+       Elevation — borders first; shadows are two-layer and low-opacity
+       --------------------------------------------------------------------- */
+    --si-shadow-1: 0 1px 2px rgba(17, 20, 17, .04), 0 1px 3px rgba(17, 20, 17, .03);
+    --si-shadow-2: 0 1px 2px rgba(17, 20, 17, .04), 0 8px 24px rgba(17, 20, 17, .06);
+    --si-shadow-3: 0 2px 4px rgba(17, 20, 17, .05), 0 20px 48px rgba(17, 20, 17, .10);
+
+    /* Motion */
+    --si-t-fast: 160ms;
+    --si-t-normal: 260ms;
+    --si-t-slow: 360ms;
+    --si-ease-premium: cubic-bezier(.22, 1, .36, 1);
+    --si-ease-standard: cubic-bezier(.4, 0, .2, 1);
+
+    /* Z-index scale */
+    --si-z-below: -1;
+    --si-z-base: 0;
+    --si-z-sticky: 100;
+    --si-z-nav: 200;
+    --si-z-dropdown: 300;
+    --si-z-modal: 400;
+    --si-z-toast: 500;
+    --si-z-tooltip: 600;
 
     /* Layout */
-    --container: 1200px;
+    --si-container-max: 1440px;
+    --si-container-content: 1360px;
+    --si-container-text: 68ch;
+    --si-nav-height: 72px;
+    --si-bottom-nav: 64px;
+
+    --si-focus-color: #174A3A;
+    --si-focus-ring: 0 0 0 3px rgba(23, 74, 58, .28);
+
+    color-scheme: light;
+}
+
+/* =====================================================================
+   LEGACY ALIASES — consumed by base/layout/components/pages/utilities.css
+   and by inline `var(--…)` usage inside the existing views.
+   ===================================================================== */
+:root {
+    --bg: var(--si-bg);
+    --bg-elevated: var(--si-surface-elevated);
+    --bg-sunken: var(--si-surface-sunken);
+    --surface: var(--si-surface);
+    --surface-2: var(--si-surface-sunken);
+    --border: var(--si-border);
+    --border-strong: var(--si-border-strong);
+
+        --text: var(--si-text);
+    --text-muted: var(--si-text-muted);
+    --text-faint: var(--si-text-faint);
+    --text-xmuted: var(--si-text-faint);
+    --muted: var(--si-text-muted);
+
+    /* Premium stat card */
+    --stat: 0 1px 2px rgba(17, 20, 17, .04), 0 8px 24px rgba(17, 20, 17, .06);
+    --stat-inner: var(--si-surface-elevated);
+    --stat-value: var(--si-text);
+
+    --brand: var(--si-brand);
+    --brand-strong: var(--si-brand-hover);
+    --brand-soft: var(--si-brand-soft);
+    --accent: var(--si-brand);
+    --premium: var(--si-premium);
+
+    --action-bg: var(--si-brand);
+    --action-hover: var(--si-brand-hover);
+    --action-text: var(--si-brand-contrast);
+
+    --success: var(--si-success);
+    --success-soft: var(--si-success-soft);
+    --warning: var(--si-warning);
+    --warning-soft: var(--si-warning-soft);
+    --danger: var(--si-danger);
+    --danger-soft: var(--si-danger-soft);
+    --info: var(--si-info);
+    --info-soft: var(--si-info-soft);
+
+    --font-sans: var(--si-font-sans);
+    --font-display: var(--si-font-display);
+
+    --text-xs: var(--si-text-xs);
+    --text-sm: var(--si-text-sm);
+    --text-md: var(--si-text-md);
+    --text-lg: var(--si-text-lg);
+    --text-xl: var(--si-text-xl);
+    --text-2xl: var(--si-text-2xl);
+    --text-3xl: var(--si-text-3xl);
+    --text-display: var(--si-text-4xl);
+
+    --space-1: var(--si-space-1);
+    --space-2: var(--si-space-2);
+    --space-3: var(--si-space-3);
+    --space-4: var(--si-space-4);
+    --space-5: var(--si-space-5);
+    --space-6: var(--si-space-6);
+    --space-7: var(--si-space-7);
+    --space-8: var(--si-space-8);
+    --space-section: var(--si-section);
+    --page-gutter: var(--si-gutter);
+
+    --radius-sm: var(--si-r-sm);
+    --radius-md: var(--si-r-md);
+    --radius-lg: var(--si-r-lg);
+    --radius-xl: var(--si-r-xl);
+    --radius-full: var(--si-r-pill);
+
+    --shadow-1: var(--si-shadow-1);
+    --shadow-2: var(--si-shadow-2);
+    --shadow-3: var(--si-shadow-3);
+
+    --transition-fast: var(--si-t-fast) var(--si-ease-standard);
+    --transition-base: var(--si-t-normal) var(--si-ease-premium);
+    --transition-slow: var(--si-t-slow) var(--si-ease-premium);
+
+    --z-below: var(--si-z-below);
+    --z-base: var(--si-z-base);
+    --z-sticky: var(--si-z-sticky);
+    --z-dropdown: var(--si-z-nav);
+    --z-overlay: var(--si-z-dropdown);
+    --z-modal: var(--si-z-modal);
+    --z-toast: var(--si-z-toast);
+
+    --container: var(--si-container-content);
     --container-narrow: 760px;
-    --nav-height: 68px;
+    --nav-height: var(--si-nav-height);
 
-    /* Focus */
-    --focus-ring: 0 0 0 3px rgba(242, 181, 107, 0.45);
+    --focus-color: var(--si-focus-color);
+    --focus-ring: var(--si-focus-ring);
 }
 
-/* Light theme ------------------------------------------------------------- */
-[data-theme='light'] {
-    --bg: #f7f8fb;
-    --bg-elevated: #ffffff;
-    --bg-sunken: #eceff5;
-    --surface: #ffffff;
-    --surface-2: #f0f2f8;
-    --border: rgba(31, 41, 72, 0.14);
-    --border-strong: rgba(31, 41, 72, 0.28);
+/* ---------------------------------------------------------------------------
+   Colour — dark mode
+   --------------------------------------------------------------------------- */
+[data-theme="dark"] {
+    --si-bg: #0D100F;
+    --si-surface: #151917;
+    --si-surface-elevated: #1C211E;
+    --si-surface-sunken: #101412;
+    --si-text: #F6F7F4;
+    --si-text-muted: #A7ADA8;
+    --si-text-faint: #7E857F;
+    --si-border: rgba(246, 247, 244, .10);
+    --si-border-strong: rgba(246, 247, 244, .24);
 
-    --text: #1b2337;
-    --text-muted: #57617c;
-    --text-faint: #8d97b2;
+    --si-brand: #4E9C7C;
+    --si-brand-hover: #5FAE8D;
+    --si-brand-soft: rgba(78, 156, 124, .14);
+    --si-brand-contrast: #06120D;
 
-    --shadow-1: 0 1px 3px rgba(27, 35, 55, 0.10);
-    --shadow-2: 0 6px 20px rgba(27, 35, 55, 0.12);
-    --shadow-3: 0 14px 44px rgba(27, 35, 55, 0.16);
+    --si-premium: #D9C08C;
+    --si-premium-soft: rgba(217, 192, 140, .16);
+    --si-premium-contrast: #17130A;
 
-    --focus-ring: 0 0 0 3px rgba(224, 151, 66, 0.40);
+    --si-success: #4FB07E;
+    --si-success-soft: rgba(79, 176, 126, .14);
+    --si-warning: #D6A138;
+    --si-warning-soft: rgba(214, 161, 56, .14);
+    --si-danger: #E4796F;
+    --si-danger-soft: rgba(228, 121, 111, .14);
+    --si-info: #6FA3E0;
+    --si-info-soft: rgba(111, 163, 224, .14);
+
+    --si-overlay: rgba(0, 0, 0, .62);
+    --si-inverse-bg: #F6F7F4;
+    --si-inverse-text: #111411;
+
+    --si-shadow-1: 0 1px 2px rgba(0, 0, 0, .30), 0 1px 3px rgba(0, 0, 0, .22);
+    --si-shadow-2: 0 1px 2px rgba(0, 0, 0, .30), 0 8px 24px rgba(0, 0, 0, .34);
+    --si-shadow-3: 0 2px 4px rgba(0, 0, 0, .34), 0 20px 48px rgba(0, 0, 0, .44);
+
+    --si-focus-color: #4E9C7C;
+    --si-focus-ring: 0 0 0 3px rgba(78, 156, 124, .34);
+
+    color-scheme: dark;
 }
 
-@media (prefers-color-scheme: light) {
-    [data-theme='system'] {
-        --bg: #f7f8fb;
-        --bg-elevated: #ffffff;
-        --bg-sunken: #eceff5;
-        --surface: #ffffff;
-        --surface-2: #f0f2f8;
-        --border: rgba(31, 41, 72, 0.14);
-        --border-strong: rgba(31, 41, 72, 0.28);
-        --text: #1b2337;
-        --text-muted: #57617c;
-        --text-faint: #8d97b2;
-        --shadow-1: 0 1px 3px rgba(27, 35, 55, 0.10);
-        --shadow-2: 0 6px 20px rgba(27, 35, 55, 0.12);
-        --shadow-3: 0 14px 44px rgba(27, 35, 55, 0.16);
-        --focus-ring: 0 0 0 3px rgba(224, 151, 66, 0.40);
+/* `data-theme="system"` is normally resolved to light/dark before paint by the
+   theme manager; this honours the media query for the no-JS case. */
+@media (prefers-color-scheme: dark) {
+    [data-theme="system"] {
+        --si-bg: #0D100F;
+        --si-surface: #151917;
+        --si-surface-elevated: #1C211E;
+        --si-surface-sunken: #101412;
+        --si-text: #F6F7F4;
+        --si-text-muted: #A7ADA8;
+        --si-text-faint: #7E857F;
+        --si-border: rgba(246, 247, 244, .10);
+        --si-border-strong: rgba(246, 247, 244, .24);
+
+        --si-brand: #4E9C7C;
+        --si-brand-hover: #5FAE8D;
+        --si-brand-soft: rgba(78, 156, 124, .14);
+        --si-brand-contrast: #06120D;
+
+        --si-premium: #D9C08C;
+        --si-premium-soft: rgba(217, 192, 140, .16);
+
+        --si-success: #4FB07E;
+        --si-success-soft: rgba(79, 176, 126, .14);
+        --si-warning: #D6A138;
+        --si-warning-soft: rgba(214, 161, 56, .14);
+        --si-danger: #E4796F;
+        --si-danger-soft: rgba(228, 121, 111, .14);
+        --si-info: #6FA3E0;
+        --si-info-soft: rgba(111, 163, 224, .14);
+
+        --si-overlay: rgba(0, 0, 0, .62);
+        --si-inverse-bg: #F6F7F4;
+        --si-inverse-text: #111411;
+
+        --si-shadow-1: 0 1px 2px rgba(0, 0, 0, .30), 0 1px 3px rgba(0, 0, 0, .22);
+        --si-shadow-2: 0 1px 2px rgba(0, 0, 0, .30), 0 8px 24px rgba(0, 0, 0, .34);
+        --si-shadow-3: 0 2px 4px rgba(0, 0, 0, .34), 0 20px 48px rgba(0, 0, 0, .44);
+
+        --si-focus-color: #4E9C7C;
+        --si-focus-ring: 0 0 0 3px rgba(78, 156, 124, .34);
+
+        color-scheme: dark;
     }
 }
 
-/* Reduced motion ---------------------------------------------------------- */
+/* Motion is opt-out at the token layer, so no component needs its own guard. */
 @media (prefers-reduced-motion: reduce) {
     :root {
+        --si-t-fast: 0ms;
+        --si-t-normal: 0ms;
+        --si-t-slow: 0ms;
         --transition-fast: 0ms;
         --transition-base: 0ms;
         --transition-slow: 0ms;
     }
 }
+
+

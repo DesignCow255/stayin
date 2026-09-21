@@ -5,15 +5,16 @@ if (!$flash) {
     return;
 }
 $type = $flash['type'] ?? 'info';
-$icon = match ($type) {
-    'success' => 'fa-check-circle',
-    'error', 'danger' => 'fa-x-circle',
-    'warning' => 'fa-triangle-exclamation',
-    default => 'fa-circle-info',
+$variant = $type === 'error' || $type === 'danger' ? 'error' : ($type === 'success' ? 'success' : ($type === 'warning' ? 'warning' : 'info'));
+$icon = match ($variant) {
+    'success' => 'check-circle',
+    'error' => 'error',
+    'warning' => 'alert',
+    default => 'info',
 };
 ?>
-<div class="alert alert--<?= e($type === 'error' || $type === 'danger' ? 'error' : ($type === 'success' ? 'success' : ($type === 'warning' ? 'warning' : 'info'))) ?>" id="flash-status" role="status" aria-live="polite">
-  <i class="fa-solid <?= e($icon) ?>" aria-hidden="true"></i>
+<div class="si-alert si-alert--<?= e($variant) ?>" id="flash-status" role="status" aria-live="polite" data-flash-dismiss>
+  <?= icon($icon) ?>
   <span><?= e($flash['message']) ?></span>
-  <button class="alert__close" onclick="this.parentElement.remove()" aria-label="Dismiss"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+  <button type="button" class="si-alert__close" data-dismiss-flash aria-label="Dismiss"><?= icon('close', 'si-icon--sm') ?></button>
 </div>

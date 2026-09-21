@@ -11,30 +11,28 @@ declare(strict_types=1);
  * Returns the absolute application base path.
  */
 
+// ---------------------------------------------------------------------------
+// 1. Composer autoloader
+// ---------------------------------------------------------------------------
+$basePath = dirname(__DIR__);
+$composerAutoload = $basePath . '/vendor/autoload.php';
+
+if (!is_file($composerAutoload)) {
+    throw new RuntimeException(
+        'Composer autoloader not found. Run composer install from: ' . $basePath
+    );
+}
+
+require_once $composerAutoload;
+
 use App\Core\Cache;
-use App\Core\Config;
+use App\Core\Config; // Ensure Config is usable
 use App\Core\Env;
 use App\Core\ErrorHandler;
 use App\Core\Logger;
 use App\Core\RequestContext;
 use App\Core\View;
 
-$basePath = dirname(__DIR__);
-
-// ---------------------------------------------------------------------------
-// 1. Autoloading (Composer when available, otherwise the bundled PSR-4 loader)
-// ---------------------------------------------------------------------------
-$composer = $basePath . '/vendor/autoload.php';
-if (is_file($composer)) {
-    require $composer;
-} else {
-    require $basePath . '/app/Core/Autoloader.php';
-    App\Core\Autoloader::register();
-}
-
-if (!function_exists('e')) {
-    require $basePath . '/app/Support/helpers.php';
-}
 
 // ---------------------------------------------------------------------------
 // 2. Environment
@@ -43,7 +41,9 @@ Env::load($basePath . '/.env');
 
 // ---------------------------------------------------------------------------
 // 3. Configuration
-// ---------------------------------------------------------------------------
+// ------------------------------------------------------$PHP -r "require 'bootstrap/app.php'; echo 'BOOTSTRAP OK', PHP_EOL;"---------------------
+// Config class should now be available due to explicit require in helpers.php
+// and helpers.php being loaded here.
 foreach (
     [
         'app', 'database', 'booking', 'currency', 'locale', 'mail',
@@ -55,6 +55,7 @@ foreach (
 }
 
 // Expose the resolved base path so other config/services can build paths safely.
+// Ensure Config::set is available (it should be via helpers.php)
 Config::get('app.base_path') ?? Config::set('app.base_path', $basePath);
 Config::set('app.base_path', Config::string('app.base_path', $basePath));
 

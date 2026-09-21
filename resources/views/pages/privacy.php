@@ -1,4 +1,4 @@
-<?php use App\Core\View; View::start('content'); ?>
+<?php use App\Core\View; \App\Core\View::start('content'); ?>
 <section class="page-section"><div class="container">
   <h1>Privacy Policy</h1>
   <div class="prose">
@@ -10,4 +10,4 @@
     <p>You may request access, correction, or deletion of your personal data by contacting support@stayin.co.tz.</p>
   </div>
 </div></section>
-<?php View::stop() ?>
+<?php \App\Core\View::stop() ?>

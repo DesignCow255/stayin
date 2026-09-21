@@ -3,6 +3,8 @@
 /** @var string $csrfToken */
 /** @var string|null $email */
 use App\Core\View;
+$email = isset($email) && is_string($email) && trim($email) !== '' ? trim($email) : null;
+$csrfToken = isset($csrfToken) && is_string($csrfToken) && $csrfToken !== '' ? $csrfToken : csrf_token();
 View::start('content');
 ?>
 <section class="page-section">
@@ -12,32 +14,25 @@ View::start('content');
         <i class="fa-solid fa-envelope-circle-check" aria-hidden="true"></i>
       </div>
       <h1 class="auth__title">Verify your email</h1>
-      <p class="text-muted">We've sent a 6-digit code to your email.</p>
+      <p class="text-muted">
+        <?php if ($email !== null): ?>
+          We've sent a verification link to <?= e($email) ?>.
+        <?php else: ?>
+          Use the verification link sent to your email address.
+        <?php endif; ?>
+      </p>
       <?php if (!empty($errors)): ?>
         <div class="alert alert--error" role="alert"><?= e(implode(' ', (array) $errors)) ?></div>
       <?php endif; ?>
-      <form method="POST" action="/verify" class="auth-form" data-validate>
-        <input type="hidden" name="_token" value="<?= e($csrfToken) ?>">
-        <?php if ($email): ?>
-          <input type="hidden" name="email" value="<?= e($email) ?>">
-        <?php endif; ?>
-        <div class="form-group">
-          <label for="code">Verification code</label>
-          <input id="code" name="code" type="text" inputmode="numeric" required
-            autocomplete="one-time-code" placeholder="000000"
-            style="font-size:1.5rem;text-align:center;letter-spacing:0.5rem;"
-            pattern="\d{6}" maxlength="6">
-        </div>
-        <button type="submit" class="btn btn--primary btn--block">Verify</button>
-      </form>
+      <p class="text-muted">For your security, StayIn verifies accounts through single-use email links instead of browser-entered codes.</p>
       <p style="margin-top:var(--space-4);">
-        <form method="POST" action="/verify/resend" style="display:inline;">
+        <form method="POST" action="<?= e(url('/verify-email/resend')) ?>" style="display:inline;">
           <input type="hidden" name="_token" value="<?= e($csrfToken) ?>">
-          Resend code
+          <button type="submit" class="btn btn--primary btn--block">Resend verification link</button>
         </form>
       </p>
       <p style="margin-top:var(--space-2);">
-        <a href="/login">Back to sign in</a>
+        <a href="<?= e(url('/login')) ?>">Back to sign in</a>
       </p>
     </div>
   </div>

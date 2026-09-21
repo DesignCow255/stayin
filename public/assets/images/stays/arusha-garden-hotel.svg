@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Arusha garden hotel</title><desc id="desc">Original StayIn boutique garden hotel illustration inspired by northern Tanzania.</desc>
+  <defs><linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#DDF4EB"/><stop offset="1" stop-color="#F7E6C7"/></linearGradient></defs>
+  <rect width="800" height="600" fill="url(#sky)"/><path d="M0 385 C175 330 310 380 465 345 C610 312 710 330 800 305 L800 600 L0 600Z" fill="#7FA45B"/><path d="M0 465 C160 428 365 450 515 420 C650 395 725 410 800 390 L800 600 L0 600Z" fill="#42683E"/>
+  <g transform="translate(142 218)"><path d="M20 118 L255 10 L500 118 Z" fill="#6F4524"/><rect x="58" y="118" width="405" height="210" rx="18" fill="#FFF4DF"/><rect x="100" y="160" width="82" height="76" rx="10" fill="#164556"/><rect x="222" y="155" width="91" height="173" rx="12" fill="#174A3A"/><rect x="355" y="160" width="64" height="76" rx="10" fill="#164556"/><path d="M0 118 H520" stroke="#D6A253" stroke-width="18" stroke-linecap="round"/></g>
+  <g fill="#23553B"><circle cx="105" cy="418" r="35"/><circle cx="78" cy="443" r="26"/><circle cx="682" cy="400" r="42"/><circle cx="718" cy="432" r="30"/></g>
+</svg>

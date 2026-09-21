@@ -134,7 +134,7 @@ final class ErrorHandler
             . 'p{color:#a1a1aa;line-height:1.6}a{color:#d4a373}</style></head><body><main>'
             . '<h1>' . $title . '</h1><p>Reference: <code>' . $reference . '</code></p>'
             . $detail
-            . '<p><a href="/">Return to StayIn</a></p></main></body></html>';
+            . '<p><a href="' . htmlspecialchars(url('/'), ENT_QUOTES) . '">Return to StayIn</a></p></main></body></html>';
     }
 
     public static function code(int $status): string

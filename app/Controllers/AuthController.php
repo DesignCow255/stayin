@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Core\Config;
 use App\Core\Controller;
 use App\Core\Csrf;
+use App\Core\BusinessException;
 use App\Core\Request;
 use App\Core\Response;
 use App\Core\Session;
@@ -35,7 +36,14 @@ final class AuthController extends Controller
 
         if (AuthService::attempt((string) $data['email'], (string) $data['password'])) {
             Session::flash('status', ['type' => 'success', 'message' => 'Welcome back!']);
-            return $this->redirect(SessionTarget::pullIntended('/guest'));
+            $home = AuthService::home();
+            $intended = SessionTarget::pullIntended($home);
+
+            if (!$this->isAllowedLanding($intended, $home)) {
+                $intended = $home;
+            }
+
+            return $this->redirect($intended);
         }
 
         Session::flashErrors(['email' => 'Those credentials do not match our records.']);
@@ -61,8 +69,13 @@ final class AuthController extends Controller
             'phone' => 'phone',
             'password' => 'required|min:10|max:72',
             'password_confirmation' => 'required',
-            'role' => 'in:host,guest',
+            'role' => 'required|in:guest,host',
         ])->validated();
+
+        $role = (string) $validated['role'];
+        if (!in_array($role, ['guest', 'host'], true)) {
+            throw new BusinessException('Only guest and host accounts can be created from this form.');
+        }
 
         if ((string) $validated['password'] !== (string) $validated['password_confirmation']) {
             return $this->failRegister(['password_confirmation' => 'Password confirmation does not match.'], $request);
@@ -84,15 +97,15 @@ final class AuthController extends Controller
             'email' => $email,
             'phone' => $phone !== '' ? $phone : null,
             'password_hash' => AuthService::hash((string) $validated['password']),
-            'role' => ($validated['role'] ?? 'guest') === 'host' ? 'host' : 'guest',
+            'role' => $role,
         ]);
 
         AuthService::login($userId);
         AccountService::verification($userId);
 
-        Session::flash('status', ['type' => 'success', 'message' => 'Your StayIn account is ready.']);
+        Session::flash('status', ['type' => 'success', 'message' => 'Account created. Please verify your email address to continue.']);
 
-        return $this->redirect('/');
+        return $this->redirect('/verify-email');
     }
 
     public function logout(Request $request): Response
@@ -132,7 +145,12 @@ final class AuthController extends Controller
 
     public function verifyNotice(Request $request): Response
     {
-        return $this->view('auth/verify', ['metaTitle' => 'Verify email · StayIn', 'metaDescription' => '']);
+        $user = AuthService::user();
+        return $this->view('auth/verify', [
+            'metaTitle' => 'Verify email · StayIn',
+            'metaDescription' => '',
+            'email' => is_array($user) ? (string) ($user['email'] ?? '') : null,
+        ]);
     }
 
     public function resendVerification(Request $request): Response
@@ -145,8 +163,8 @@ final class AuthController extends Controller
     public function verify(Request $request): Response
     {
         AccountService::verify((string)$request->routeParam('token'));
-        Session::flash('status',['message'=>'Email verified.']);
-        return $this->redirect('/login');
+        Session::flash('status',['type'=>'success','message'=>'Email verified successfully.']);
+        return $this->redirect(AuthService::check() ? AuthService::home() : '/login');
     }
 
     /**
@@ -157,5 +175,26 @@ final class AuthController extends Controller
         Session::flashErrors($errors);
         Session::flashInput($request->only(['first_name', 'last_name', 'email', 'phone', 'role']));
         return $this->redirect('/register', 303);
+    }
+
+    private function isAllowedLanding(string $path, string $home): bool
+    {
+        if ($path === '' || !str_starts_with($path, '/') || str_starts_with($path, '//')) {
+            return false;
+        }
+
+        if (str_starts_with($path, '/admin')) {
+            return $home === '/admin';
+        }
+
+        if (str_starts_with($path, '/host')) {
+            return $home === '/host';
+        }
+
+        if (str_starts_with($path, '/guest')) {
+            return $home === '/guest';
+        }
+
+        return true;
     }
 }

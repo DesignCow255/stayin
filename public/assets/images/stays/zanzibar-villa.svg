@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Zanzibar beach villa</title><desc id="desc">Original StayIn beach villa illustration with palms and turquoise water.</desc>
+  <defs><linearGradient id="a" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#BDEDF4"/><stop offset="1" stop-color="#FFF1C8"/></linearGradient><linearGradient id="b" x1="0" x2="1"><stop stop-color="#0B7C86"/><stop offset="1" stop-color="#8DE3CF"/></linearGradient></defs>
+  <rect width="800" height="600" fill="url(#a)"/><path d="M0 290 C165 250 285 310 430 282 C555 260 650 280 800 238 L800 600 L0 600Z" fill="url(#b)"/><path d="M0 385 C180 340 360 388 520 352 C650 325 728 345 800 318 L800 600 L0 600Z" fill="#E8C17A"/>
+  <g transform="translate(170 205)"><path d="M0 120 L185 0 L370 120 Z" fill="#70451F"/><rect x="38" y="120" width="295" height="185" rx="12" fill="#FFF8EA"/><rect x="75" y="158" width="75" height="70" rx="8" fill="#174A3A"/><rect x="208" y="158" width="82" height="147" rx="10" fill="#155E63"/><path d="M-20 120 H390" stroke="#DEB567" stroke-width="16" stroke-linecap="round"/></g>
+  <g fill="none" stroke-linecap="round"><path d="M620 420 C615 315 635 220 695 125" stroke="#6A421F" stroke-width="16"/><path d="M695 126 C632 108 600 72 570 30 M695 126 C755 92 780 55 798 15 M695 126 C680 70 698 30 735 0 M695 126 C750 135 790 122 830 92" stroke="#176246" stroke-width="22"/></g>
+</svg>

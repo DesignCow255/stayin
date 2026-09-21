@@ -48,6 +48,14 @@ final class BookingService {
   $b=DB::first('SELECT b.*,p.name AS property_name,p.host_id,rt.name AS room_name,s.snapshot FROM bookings b JOIN properties p ON p.id=b.property_id JOIN room_types rt ON rt.id=b.room_type_id LEFT JOIN booking_price_snapshots s ON s.booking_id=b.id WHERE b.booking_reference=? AND b.guest_id=?',[$ref,$userId]);
   if(!$b) throw HttpException::notFound(); return $b;
  }
+ public static function receipt(string $ref,int $userId): array {
+  $b=DB::first('SELECT b.*,p.name AS property_name,p.host_id,rt.name AS room_name,s.snapshot FROM bookings b JOIN properties p ON p.id=b.property_id JOIN room_types rt ON rt.id=b.room_type_id LEFT JOIN booking_price_snapshots s ON s.booking_id=b.id WHERE b.booking_reference=?',[$ref]);
+  if(!$b) throw HttpException::notFound();
+  $user=AuthService::user();$role=(string)($user['role']??'');
+  $allowed=(int)$b['guest_id']===$userId || (int)$b['host_id']===$userId || in_array($role,['super_admin'],true) || Gate::allows('payments.view') || Gate::allows('bookings.view');
+  if(!$allowed) throw HttpException::forbidden();
+  return $b;
+ }
  public static function history(int $id,?string $from,string $to,?int $actor):void {DB::insert('booking_status_history',['booking_id'=>$id,'from_status'=>$from,'to_status'=>$to,'actor_id'=>$actor]);}
  public static function expire():int {
   return DB::transaction(function(){

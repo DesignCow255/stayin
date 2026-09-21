@@ -1,6 +1,6 @@
 <?php
 use App\Core\View;
-View::start('content');
+\App\Core\View::start('content');
 ?>
 <section class="page-section">
   <div class="container">
@@ -16,4 +16,4 @@ View::start('content');
     </div>
   </div>
 </section>
-<?php View::stop() ?>
+<?php \App\Core\View::stop() ?>

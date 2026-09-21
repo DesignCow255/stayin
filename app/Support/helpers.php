@@ -2,11 +2,15 @@
 
 declare(strict_types=1);
 
+// --- Explicitly require the Config class ---
+// This ensures Config is loaded before the config() helper function is called.
+// --- End explicit require ---
+
 /**
  * Global view helpers. Kept intentionally small.
  */
 
-use App\Core\Config;
+use App\Core\Cache;
 use App\Core\Csrf;
 use App\Core\Request;
 use App\Core\Session;
@@ -34,7 +38,181 @@ if (!function_exists('e')) {
 if (!function_exists('config')) {
     function config(string $key, mixed $default = null): mixed
     {
-        return Config::get($key, $default);
+        // The Config class is now explicitly required at the top of this file.
+        return \App\Core\Config::get($key, $default);
+    }
+}
+
+if (!function_exists('icon')) {
+    /**
+     * Render an inline SVG icon from the self-hosted registry.
+     *
+     * @see \App\Support\Icon
+     */
+    function icon(string $name, string $class = '', ?string $label = null): string
+    {
+        return \App\Support\Icon::render($name, $class, $label);
+    }
+}
+
+if (!function_exists('favourite_ids')) {
+    /**
+     * Property IDs the signed-in user has saved. Resolved once per request so
+     * listing pages never fire a query per card.
+     *
+     * @return array<int, bool> keyed by property id for O(1) lookup
+     */
+    function favourite_ids(): array
+    {
+        static $cache = null;
+
+        if ($cache !== null) {
+            return $cache;
+        }
+
+        $cache = [];
+        $userId = \App\Services\AuthService::id();
+
+        if ($userId !== null) {
+            foreach (\App\Core\Database::select('SELECT property_id FROM favourites WHERE user_id = ?', [$userId]) as $row) {
+                $cache[(int) $row['property_id']] = true;
+            }
+        }
+
+        return $cache;
+    }
+}
+
+if (!function_exists('is_favourite')) {
+    function is_favourite(int $propertyId): bool
+    {
+        return isset(favourite_ids()[$propertyId]);
+    }
+}
+
+if (!function_exists('amenity_items')) {
+    /**
+     * Normalise `properties.amenities` (JSON column) into usable items.
+     *
+     * @return array<int, array{label: string, icon: string}>
+     */
+    function amenity_items(mixed $amenities): array
+    {
+        if (is_string($amenities)) {
+            $amenities = json_decode($amenities, true);
+        }
+        if (!is_array($amenities)) {
+            return [];
+        }
+
+        $items = [];
+        foreach ($amenities as $amenity) {
+            if (!is_scalar($amenity)) {
+                continue;
+            }
+            $label = \App\Support\Icon::label((string) $amenity);
+            $items[] = ['label' => $label, 'icon' => \App\Support\Icon::forAmenity($label)];
+        }
+
+        return $items;
+    }
+}
+
+if (!function_exists('rating_stars')) {
+    /**
+     * Star markup for a real rating value. Never renders a rating that is absent.
+     */
+    function rating_stars(float|int|string|null $rating, string $class = 'rating'): string
+    {
+        $value = (float) ($rating ?? 0);
+        if ($value <= 0) {
+            return '';
+        }
+
+        $rounded = (int) round($value);
+        $html = '<span class="' . e($class) . '">';
+        for ($i = 1; $i <= 5; $i++) {
+            $html .= icon($i <= $rounded ? 'star-filled' : 'star', $class . '__star');
+        }
+        $html .= '</span>';
+
+        return $html;
+    }
+}
+
+if (!function_exists('format_date')) {
+    /**
+     * Locale-aware short date from a stored `Y-m-d` / datetime string.
+     */
+    function format_date(?string $value, string $format = 'j M Y'): string
+    {
+        if ($value === null || trim($value) === '') {
+            return '';
+        }
+        $timestamp = strtotime($value);
+        if ($timestamp === false) {
+            return (string) $value;
+        }
+
+        return date($format, $timestamp);
+    }
+}
+
+if (!function_exists('region_url')) {
+    function region_url(string $region): string
+    {
+        return url('/stays/' . slugify($region));
+    }
+}
+
+if (!function_exists('track')) {
+    /**
+     * `data-analytics-*` attributes for a conversion component (§29).
+     *
+     * @param array<string, string|int|float|null> $params
+     */
+    function track(string $event, array $params = []): string
+    {
+        return \App\Support\Analytics::attrs($event, $params);
+    }
+}
+
+if (!function_exists('property_type_label')) {
+    function property_type_label(string $value): string
+    {
+        return \App\Support\PropertyType::label($value);
+    }
+}
+
+if (!function_exists('property_type_plural')) {
+    function property_type_plural(string $value): string
+    {
+        return \App\Support\PropertyType::plural($value);
+    }
+}
+
+if (!function_exists('active_filter_count')) {
+    /**
+     * Number of filters actively narrowing a search — drives the "Show X
+     * properties" affordance and the filter badge.
+     *
+     * @param array<string, mixed> $filters
+     */
+    function active_filter_count(array $filters): int
+    {
+        $ignored = ['page', 'sort', 'currency'];
+        $count = 0;
+
+        foreach ($filters as $key => $value) {
+            if (in_array($key, $ignored, true)) {
+                continue;
+            }
+            if (is_array($value) ? $value !== [] : trim((string) $value) !== '') {
+                $count++;
+            }
+        }
+
+        return $count;
     }
 }
 
@@ -44,7 +222,7 @@ if (!function_exists('url')) {
      */
     function url(string $path = '/'): string
     {
-        $base = rtrim(Config::string('app.url'), '/');
+        $base = rtrim(\App\Core\Config::string('app.url'), '/');
         if ($path === '' || $path === '/') {
             return $base . '/';
         }
@@ -59,9 +237,9 @@ if (!function_exists('asset')) {
     function asset(string $path): string
     {
         $path = ltrim($path, '/');
-        $base = rtrim(Config::string('app.asset_url', Config::string('app.url')), '/');
+        $base = rtrim(\App\Core\Config::string('app.asset_url', \App\Core\Config::string('app.url')), '/');
 
-        $file = Config::string('app.base_path') . '/public/' . $path;
+        $file = \App\Core\Config::string('app.base_path') . '/public/' . $path;
         if (is_file($file)) {
             return $base . '/' . $path . '?v=' . substr((string) filemtime($file), -8);
         }
@@ -76,7 +254,61 @@ if (!function_exists('image_url')) {
         if ($path === null || trim($path) === '') {
             return asset($fallback);
         }
+        if (preg_match('#^https?://#i', $path) === 1) {
+            return $path;
+        }
+        $relativePath = ltrim($path, '/');
+        $publicFile = \App\Core\Config::string('app.base_path') . '/public/' . $relativePath;
+        if (is_file($publicFile)) {
+            return asset($relativePath);
+        }
         return url($path);
+    }
+}
+
+if (!function_exists('stayin_image_asset')) {
+    /**
+     * Local Tanzanian/African visual fallback set for generated/demo imagery.
+     *
+     * Real uploaded property photographs still win; these are used only when a
+     * listing/region/hero image is absent or callers explicitly need a local
+     * editorial visual. Keeping the set local avoids hotlinked stock images and
+     * keeps releases deterministic/offline-safe.
+     */
+    function stayin_image_asset(?string $context = null): string
+    {
+        $images = [
+            'hero' => 'assets/images/stays/tanzania-hero.svg',
+            'zanzibar' => 'assets/images/stays/zanzibar-villa.svg',
+            'serengeti' => 'assets/images/stays/serengeti-safari-lodge.svg',
+            'kilimanjaro' => 'assets/images/stays/kilimanjaro-cabin.svg',
+            'dar' => 'assets/images/stays/dar-es-salaam-apartment.svg',
+            'dar es salaam' => 'assets/images/stays/dar-es-salaam-apartment.svg',
+            'arusha' => 'assets/images/stays/arusha-garden-hotel.svg',
+            'mwanza' => 'assets/images/stays/lake-victoria-guesthouse.svg',
+            'lake' => 'assets/images/stays/lake-victoria-guesthouse.svg',
+            'villa' => 'assets/images/stays/zanzibar-villa.svg',
+            'apartment' => 'assets/images/stays/dar-es-salaam-apartment.svg',
+            'hotel' => 'assets/images/stays/arusha-garden-hotel.svg',
+            'lodge' => 'assets/images/stays/serengeti-safari-lodge.svg',
+            'cabin' => 'assets/images/stays/kilimanjaro-cabin.svg',
+            'guesthouse' => 'assets/images/stays/lake-victoria-guesthouse.svg',
+            'default' => 'assets/images/placeholder-stay.svg',
+        ];
+
+        $needle = mb_strtolower(trim((string) $context));
+        if ($needle !== '') {
+            foreach ($images as $key => $path) {
+                if ($key !== 'default' && str_contains($needle, $key)) {
+                    return $path;
+                }
+            }
+
+            $pool = array_values(array_diff_key($images, ['default' => true, 'hero' => true]));
+            return $pool[abs(crc32($needle)) % count($pool)];
+        }
+
+        return $images['default'];
     }
 }
 
@@ -96,7 +328,7 @@ if (!function_exists('format_money')) {
     function format_money(float|int|string|null $amount, string $currency = 'TZS'): string
     {
         $amount = (float) ($amount ?? 0);
-        $symbols = (array) Config::get('pricing.symbols', ['TZS' => 'Tshs.', 'USD' => '$']);
+        $symbols = (array) \App\Core\Config::get('pricing.symbols', ['TZS' => 'Tshs.', 'USD' => '$']);
 
         $symbol = (string) ($symbols[$currency] ?? $currency);
         $decimals = $currency === 'TZS' ? 0 : 2;
@@ -121,36 +353,18 @@ if (!function_exists('csrf_token')) {
 
 if (!function_exists('old')) {
     /**
-     * Retrieve flashed form input after a failed submission.
+     * Retrieve flashed form input after a failed validation.
      */
     function old(string $key, mixed $default = null): mixed
     {
-        static $cache = null;
-        if ($cache === null) {
-            $cache = Session::oldInput();
+        static $old = null;
+        if ($old === null) {
+            $old = Session::getFlash('_old', []);
+            if (!is_array($old)) {
+                $old = [];
+            }
         }
-        return $cache[$key] ?? $default;
-    }
-}
-
-if (!function_exists('errors')) {
-    /**
-     * @return array<string, string>
-     */
-    function errors(): array
-    {
-        static $cache = null;
-        if ($cache === null) {
-            $cache = Session::errors();
-        }
-        return $cache;
-    }
-}
-
-if (!function_exists('error_for')) {
-    function error_for(string $field): ?string
-    {
-        return errors()[$field] ?? null;
+        return array_key_exists($key, $old) ? $old[$key] : $default;
     }
 }
 
@@ -197,7 +411,7 @@ if (!function_exists('view_exists')) {
 if (!function_exists('app_locale')) {
     function app_locale(): string
     {
-        return (string) ($GLOBALS['stayin_locale'] ?? Config::string('locale.default_locale', 'en'));
+        return (string) ($GLOBALS['stayin_locale'] ?? \App\Core\Config::string('locale.default_locale', 'en'));
     }
 }
 
@@ -222,9 +436,9 @@ function safe_return_path(?string $referer, string $fallback = '/'): string
 {
     if (!$referer) return $fallback;
     $parts = parse_url($referer);
-    if (!$parts || (isset($parts['host']) && $parts['host'] !== parse_url(config('app.url'), PHP_URL_HOST))) return $fallback;
+    if (!$parts || (isset($parts['host']) && $parts['host'] !== parse_url(\App\Core\Config::string('app.url'), PHP_URL_HOST))) return $fallback;
     $path = $parts['path'] ?? '/';
-    $base = rtrim((string) parse_url(config('app.url'), PHP_URL_PATH), '/');
+    $base = rtrim((string) parse_url(\App\Core\Config::string('app.url'), PHP_URL_PATH), '/');
     if ($base !== '' && str_starts_with($path, $base . '/')) $path = substr($path, strlen($base));
     return str_starts_with($path, '/') && !str_starts_with($path, '//') ? $path . (isset($parts['query']) ? '?' . $parts['query'] : '') : $fallback;
 }

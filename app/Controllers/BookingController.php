@@ -21,7 +21,7 @@ final class BookingController extends Controller {
  }
  public function cancel(Request $r):Response {PaymentService::cancel((string)$r->routeParam('reference'),AuthService::id());Session::flash('status',['message'=>'Booking cancelled. Any eligible mock refund has been recorded.']);return $this->redirect('/guest/bookings',303);}
  public function receipt(Request $r):Response {
-  $b=BookingService::owned((string)$r->routeParam('reference'),AuthService::id());
+   $b=BookingService::receipt((string)$r->routeParam('reference'),AuthService::id());
   if(!in_array($b['payment_status'],['paid','refunded'],true))throw new BusinessException('A receipt is available after payment confirmation.');
   return $this->view('receipt',['metaTitle'=>'Receipt '.$b['booking_reference'],'booking'=>$b]);
  }

@@ -1,3 +1,46 @@
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../fonts/font-0.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(../fonts/font-1.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../fonts/font-2.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(../fonts/font-3.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../fonts/font-4.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../fonts/font-5.ttf) format('truetype');
+}
+
 /* ===========================================================================
    StayIn base styles — reset, typography, forms, links, a11y helpers.
    =========================================================================== */
@@ -43,7 +86,7 @@ video {
 
 h1, h2, h3, h4, h5, h6 {
     line-height: 1.2;
-    font-weight: 650;
+    font-weight: 500;
     text-wrap: balance;
 }
 
@@ -67,7 +110,8 @@ a:hover {
 
 /* Focus visibility is a platform invariant --------------------------------- */
 :focus-visible {
-    outline: none;
+    outline: 2px solid var(--focus-color);
+    outline-offset: 4px;
     box-shadow: var(--focus-ring);
     border-radius: var(--radius-sm);
 }
@@ -170,3 +214,8 @@ input[type='radio'] {
 ::selection {
     background: var(--brand-soft);
 }
+
+input:not([type="checkbox"]):not([type="radio"]), select, textarea { font-size: 1rem; border-color: var(--border-strong); background: var(--bg-elevated); }
+textarea { resize: vertical; }
+[hidden] { display: none !important; }
+[id] { scroll-margin-top: calc(var(--nav-height) + 1.5rem); }

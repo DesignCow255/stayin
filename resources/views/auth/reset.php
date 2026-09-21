@@ -3,7 +3,7 @@
 /** @var string $csrfToken */
 /** @var string $token */
 use App\Core\View;
-View::start('content');
+\App\Core\View::start('content');
 ?>
 <section class="page-section">
   <div class="container" style="max-width:var(--container-sm);">
@@ -12,7 +12,7 @@ View::start('content');
       <?php if (!empty($errors)): ?>
         <div class="alert alert--error" role="alert"><?= e(implode(' ', (array) $errors)) ?></div>
       <?php endif; ?>
-      <form method="POST" action="/password/reset" class="auth-form" data-validate>
+      <form method="POST" action="<?= e(url('/password/reset')) ?>" class="auth-form" data-validate>
         <input type="hidden" name="_token" value="<?= e($csrfToken) ?>">
         <input type="hidden" name="token" value="<?= e($token) ?>">
         <div class="form-group">
@@ -37,4 +37,4 @@ View::start('content');
     </div>
   </div>
 </section>
-<?php View::stop() ?>
+<?php \App\Core\View::stop() ?>

@@ -16,6 +16,8 @@ database/backups/*
 # ---- Runtime storage ----
 storage/logs/*
 !storage/logs/.gitkeep
+storage/backups/*
+!storage/backups/.gitkeep
 storage/cache/*
 !storage/cache/.gitkeep
 storage/sessions/*
@@ -40,3 +42,28 @@ Thumbs.db
 # ---- Test artifacts ----
 .phpunit.result.cache
 /tmp/
+# Local environment / secrets
+.env
+.env.*
+!.env.example
+
+# Local backups
+*.bak
+*.bak2
+*.before-*
+*.config-backup
+database/backups/
+
+# Runtime storage
+storage/logs/*
+storage/private/*
+storage/cache/*
+storage/sessions/*
+
+# Local/testing artifacts
+test_accounts.php
+lint.log
+
+# macOS / IDE
+.DS_Store
+.vscode/

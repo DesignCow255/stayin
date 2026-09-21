@@ -24,12 +24,6 @@ final class Authenticate implements MiddlewareInterface
             throw HttpException::forbidden('Authentication required.');
         }
 
-        SessionTarget::storeIntended($request->path());
-
-        if ($request->expectsJson()) {
-            throw HttpException::forbidden('Authentication required.');
-        }
-
         throw HttpException::redirect('/login', 'Please sign in to continue.');
     }
 }

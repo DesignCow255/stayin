@@ -2,7 +2,7 @@
 /** @var bool $errors */
 /** @var string $csrfToken */
 use App\Core\View;
-View::start('content');
+\App\Core\View::start('content');
 ?>
 <section class="page-section">
   <div class="container" style="max-width:var(--container-sm);">
@@ -12,7 +12,7 @@ View::start('content');
       <?php if (!empty($errors)): ?>
         <div class="alert alert--error" role="alert"><?= e($errors[0] ?? 'An error occurred') ?></div>
       <?php endif; ?>
-      <form method="POST" action="/password/forgot" class="auth-form" data-validate>
+      <form method="POST" action="<?= e(url('/password/forgot')) ?>" class="auth-form" data-validate>
         <input type="hidden" name="_token" value="<?= e($csrfToken) ?>">
         <div class="form-group">
           <label for="email">Email</label>
@@ -24,9 +24,9 @@ View::start('content');
         </button>
       </form>
       <p style="margin-top:var(--space-4);text-align:center;">
-        <a href="/login"><?= __('auth.submit') ?> back to login</a>
+        <a href="<?= e(url('/login')) ?>"><?= __('auth.submit') ?> back to login</a>
       </p>
     </div>
   </div>
 </section>
-<?php View::stop('content') ?>
+<?php \App\Core\View::stop('content') ?>

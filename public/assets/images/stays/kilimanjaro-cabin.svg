@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Kilimanjaro foothills cabin</title><desc id="desc">Original StayIn mountain cabin illustration with Kilimanjaro-inspired peak.</desc>
+  <defs><linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#CDEDF4"/><stop offset="1" stop-color="#F5E9C8"/></linearGradient></defs>
+  <rect width="800" height="600" fill="url(#sky)"/><path d="M80 330 L315 115 L470 330Z" fill="#56706F"/><path d="M270 156 L315 115 L355 193 C320 180 300 180 270 156Z" fill="#FFFFFF"/><path d="M330 338 L570 135 L785 338Z" fill="#3D5F5B"/><path d="M535 165 L570 135 L612 210 C575 192 558 190 535 165Z" fill="#FFFFFF"/><path d="M0 355 C160 326 295 360 430 340 C570 318 682 330 800 300 L800 600 L0 600Z" fill="#9DB06D"/><path d="M0 445 C190 405 365 440 540 414 C655 397 720 405 800 386 L800 600 L0 600Z" fill="#54713F"/>
+  <g transform="translate(210 285)"><path d="M0 98 L170 0 L340 98 Z" fill="#60391F"/><rect x="38" y="98" width="265" height="165" rx="12" fill="#D8B27C"/><rect x="72" y="135" width="75" height="62" rx="8" fill="#173B43"/><rect x="198" y="132" width="72" height="131" rx="10" fill="#174A3A"/><path d="M-18 98 H358" stroke="#85572E" stroke-width="15" stroke-linecap="round"/></g>
+</svg>

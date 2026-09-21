@@ -2,7 +2,7 @@
 /** @var bool $errors */
 /** @var string $csrfToken */
 use App\Core\View;
-View::start('content');
+\App\Core\View::start('content');
 ?>
 <section class="page-section">
   <div class="container" style="max-width:var(--container-sm);">
@@ -20,7 +20,7 @@ View::start('content');
         </div>
       <?php endif; ?>
 
-      <form method="POST" action="/login" class="auth-form" data-validate>
+      <form method="POST" action="<?= e(url('/login')) ?>" class="auth-form" data-validate>
         <input type="hidden" name="_token" value="<?= e($csrfToken) ?>">
         <div class="form-group">
           <label for="email"><?= __('auth.email') ?></label>
@@ -43,12 +43,12 @@ View::start('content');
       </form>
 
       <div class="auth__links">
-        <a href="/password/forgot"><?= __('auth.forgot') ?></a>
+        <a href="<?= e(url('/forgot-password')) ?>"><?= __('auth.forgot') ?></a>
         <p style="margin-top:var(--space-3);"><?= __('auth.no_account') ?>
-          <a href="/register" class="btn btn--ghost btn--sm"><?= __('auth.register') ?></a>
+          <a href="<?= e(url('/register')) ?>" class="btn btn--ghost btn--sm"><?= __('auth.register') ?></a>
         </p>
       </div>
     </div>
   </div>
 </section>
-<?php View::stop('content') ?>
+<?php \App\Core\View::stop('content') ?>

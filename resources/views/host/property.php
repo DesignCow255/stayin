@@ -4,13 +4,13 @@
 /** @var string $csrfToken */
 use App\Core\View;
 $isEdit = !empty($property);
-View::start('content');
+\App\Core\View::start('content');
 ?>
 <section class="page-section">
   <div class="container">
     <div class="host-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-5);">
       <h1><?= $isEdit ? 'Edit property' : 'Add new property' ?></h1>
-      <a href="/host/properties" class="btn btn--ghost"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back</a>
+      <a href="<?= e(url('/host/properties')) ?>" class="btn btn--ghost"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back</a>
     </div>
 
     <?php if (!empty($errors)): ?>
@@ -51,4 +51,4 @@ View::start('content');
     </form>
   </div>
 </section>
-<?php View::stop() ?>
+<?php \App\Core\View::stop() ?>

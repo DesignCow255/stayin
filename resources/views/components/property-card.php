@@ -1,5 +1,7 @@
 <?php
 /**
+ * Premium property card (§10).
+ *
  * @var array{
  *   id: int,
  *   name: string,
@@ -16,45 +18,71 @@
  * } $property
  */
 $cover = $property['cover_image'] ?? null;
-$url = url('/property/' . e($property['slug']));
-$region = $property['region'] ?? '';
-$propertyType = $property['property_type'] ?? '';
-$minPrice = isset($property['min_price']) ? format_money((float) ($property['min_price'] ?? 0), $property['currency'] ?? 'TZS') : '';
+$url = url('/property/' . $property['slug']);
+$region = (string) ($property['region'] ?? '');
+$propertyType = (string) ($property['property_type'] ?? '');
+$fallbackImage = stayin_image_asset(trim($region . ' ' . $propertyType . ' ' . (string) ($property['name'] ?? '')));
+$hasPrice = isset($property['min_price']) && $property['min_price'] !== null && (float) $property['min_price'] > 0;
+$minPrice = $hasPrice ? format_money((float) $property['min_price'], $property['currency'] ?? 'TZS') : '';
 $rating = $property['rating'] ?? null;
 $reviewCount = (int) ($property['review_count'] ?? 0);
 $verified = !empty($property['verification_status']) && $property['verification_status'] === 'verified';
 $featured = !empty($property['featured']) && (int) $property['featured'] !== 0;
+$saved = is_favourite((int) ($property['id'] ?? 0));
+$propertyId = (int) ($property['id'] ?? 0);
 ?>
-<a href="<?= e($url) ?>" class="property-card">
-  <div class="property-card__media">
-    <img src="<?= e(image_url($cover, 'assets/images/placeholder-stay.svg')) ?>" alt="<?= e($property['name'] ?? 'Stay') ?>" loading="lazy" class="property-card__image">
-    <?php if ($featured): ?>
-    <span class="badge badge--brand property-card__badge"><?= e(t('featured')) ?: 'Featured' ?></span>
-    <?php endif; ?>
-    <?php if ($propertyType): ?>
-    <span class="property-card__type"><?= e(ucfirst($propertyType)) ?></span>
-    <?php endif; ?>
-  </div>
-  <div class="property-card__body">
-    <div class="property-card__meta">
-      <?php if ($verified): ?>
-      <span class="badge badge--success property-card__badge"><i class="fa-solid fa-check" aria-hidden="true"></i> Verified</span>
+<article class="si-card si-reveal">
+  <div class="si-card__media">
+    <a href="<?= e($url) ?>" aria-label="<?= e($property['name'] ?? 'Stay') ?>">
+      <img class="si-card__img" src="<?= e(image_url($cover, $fallbackImage)) ?>"
+           alt="<?= e($property['name'] ?? 'Stay') ?>" loading="lazy" decoding="async" width="800" height="600">
+    </a>
+    <div class="si-card__flags">
+      <div class="si-row si-row--nowrap" style="gap:6px">
+        <?php if ($featured): ?>
+        <span class="si-badge si-badge--over"><?= icon('sparkles', 'si-icon--sm') ?> Featured</span>
+        <?php endif; ?>
+        <?php if ($verified): ?>
+        <span class="si-badge si-badge--over"><?= icon('badge-check', 'si-icon--sm') ?> Verified</span>
+        <?php endif; ?>
+      </div>
+      <?php if ($propertyId > 0): ?>
+      <?php if (auth_check()): ?>
+      <form method="POST" action="<?= e(url('/guest/favourites')) ?>"<?= track('favourite_toggled', ['entity_id' => $propertyId, 'surface' => 'card']) ?>>
+        <?= csrf_field() ?>
+        <input type="hidden" name="property_id" value="<?= e($propertyId) ?>">
+        <input type="hidden" name="action" value="<?= $saved ? 'remove' : 'add' ?>">
+        <button type="submit" class="si-fav" data-favourite-toggle
+                aria-pressed="<?= $saved ? 'true' : 'false' ?>"
+                aria-label="<?= $saved ? 'Remove from saved stays' : 'Save this stay' ?>">
+          <?= icon($saved ? 'heart-filled' : 'heart') ?>
+        </button>
+      </form>
+      <?php else: ?>
+      <a href="<?= e(url('/login')) ?>" class="si-fav" aria-label="Sign in to save this stay"><?= icon('heart') ?></a>
       <?php endif; ?>
-      <span class="property-card__region"><?= e($region) ?></span>
+      <?php endif; ?>
     </div>
-    <h3 class="property-card__title"><?= e($property['name'] ?? '') ?></h3>
-    <?php if ($rating !== null && $rating !== '' && $rating > 0): ?>
-    <div class="property-card__rating">
-      <i class="fa-solid fa-star" style="color:var(--brand)" aria-hidden="true"></i>
-      <strong><?= e(number_format((float) $rating, 1)) ?></strong>
-      <span class="text-muted">(<?= e($reviewCount) ?> <?= e(str_contains(t('reviews') ?: 'reviews', 'review') ? 'review' : 'reviews') ?>)</span>
-    </div>
-    <?php endif; ?>
-    <?php if ($minPrice !== ''): ?>
-    <div class="property-card__price">
-      <span class="property-card__price-value"><?= e($minPrice) ?></span>
-      <span class="property-card__price-note">starting · <?= e(strtoupper($property['currency'] ?? 'TZS')) ?></span>
-    </div>
-    <?php endif; ?>
   </div>
-</a>
+  <div class="si-card__body">
+    <p class="si-card__loc"><?= icon('map-pin', 'si-icon--sm') ?><?= e($region) ?></p>
+    <h3 class="si-card__title"><a href="<?= e($url) ?>"><?= e($property['name'] ?? '') ?></a></h3>
+    <div class="si-card__specs">
+      <?php if ($propertyType !== ''): ?>
+      <span class="si-card__spec"><?= icon(\App\Support\PropertyType::icon($propertyType), 'si-icon--sm') ?><?= e(property_type_label($propertyType)) ?></span>
+      <?php endif; ?>
+      <?php if ($rating !== null && $rating !== '' && (float) $rating > 0): ?>
+      <span class="si-card__spec si-rating"><?= icon('star-filled', 'si-icon--sm') ?><span class="si-amount"><?= e(number_format((float) $rating, 1)) ?></span><?php if ($reviewCount > 0): ?><span class="si-rating__count">(<?= e($reviewCount) ?>)</span><?php endif; ?></span>
+      <?php endif; ?>
+    </div>
+    <div class="si-card__foot">
+      <?php if ($hasPrice): ?>
+      <p class="si-card__price" style="margin:0"><?= e($minPrice) ?> <span class="si-card__per">/ night</span></p>
+      <a class="si-link si-link--muted" href="<?= e($url) ?>">View<?= icon('arrow-right', 'si-icon--sm') ?></a>
+      <?php else: ?>
+      <p class="si-card__price si-card__per" style="margin:0">Prices on request</p>
+      <a class="si-link si-link--muted" href="<?= e($url) ?>">View<?= icon('arrow-right', 'si-icon--sm') ?></a>
+      <?php endif; ?>
+    </div>
+  </div>
+</article>

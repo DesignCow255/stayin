@@ -39,3 +39,7 @@
 @media (max-width: 720px) {
     .u-hide-mobile { display: none !important; }
 }
+
+.u-measure { max-width: 65ch; }
+.u-tabular { font-variant-numeric: tabular-nums; }
+.u-text-balance { text-wrap: balance; }

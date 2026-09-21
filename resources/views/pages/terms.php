@@ -1,4 +1,4 @@
-<?php use App\Core\View; View::start('content'); ?>
+<?php use App\Core\View; \App\Core\View::start('content'); ?>
 <section class="page-section"><div class="container">
   <h1>Terms & Conditions</h1>
   <div class="prose">
@@ -10,4 +10,4 @@
     <p>Verified hosts must maintain listing accuracy and honour confirmed bookings.</p>
   </div>
 </div></section>
-<?php View::stop() ?>
+<?php \App\Core\View::stop() ?>

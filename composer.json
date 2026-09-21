@@ -39,7 +39,8 @@
         "serve": "php -S 127.0.0.1:8888 -t public public/index.php",
         "migrate": "php cli/stayin.php migrate",
         "seed": "php cli/stayin.php seed",
-        "test": "php tests/run.php"
+        "test": "php tests/run.php",
+        "release:check": "php tests/release_check.php"
     },
     "minimum-stability": "stable",
     "prefer-stable": true

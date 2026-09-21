@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Dar es Salaam modern apartment</title><desc id="desc">Original StayIn modern city apartment illustration with tropical landscaping.</desc>
+  <defs><linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#D8F2F4"/><stop offset="1" stop-color="#F8E9C6"/></linearGradient></defs>
+  <rect width="800" height="600" fill="url(#sky)"/><path d="M0 405 C160 360 320 390 470 360 C620 332 710 350 800 330 L800 600 L0 600Z" fill="#DAB06C"/>
+  <g transform="translate(205 115)"><rect x="0" y="85" width="390" height="355" rx="18" fill="#F7F2E8"/><rect x="35" y="35" width="320" height="85" rx="16" fill="#174A3A"/><path d="M38 122 H352" stroke="#D3A65B" stroke-width="8"/><g fill="#143A49"><rect x="42" y="155" width="74" height="58" rx="8"/><rect x="158" y="155" width="74" height="58" rx="8"/><rect x="274" y="155" width="74" height="58" rx="8"/><rect x="42" y="252" width="74" height="58" rx="8"/><rect x="158" y="252" width="74" height="58" rx="8"/><rect x="274" y="252" width="74" height="58" rx="8"/></g><rect x="158" y="345" width="85" height="95" rx="10" fill="#155E63"/></g>
+  <g fill="none" stroke-linecap="round"><path d="M125 470 C118 385 136 315 190 238" stroke="#6A421F" stroke-width="14"/><path d="M190 238 C140 218 110 185 88 145 M190 238 C246 215 282 180 305 130 M190 238 C188 180 210 137 245 98" stroke="#176246" stroke-width="21"/></g>
+</svg>

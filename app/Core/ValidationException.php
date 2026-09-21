@@ -18,4 +18,9 @@ class ValidationException extends \RuntimeException
     {
         return $this->validator->errors();
     }
+
+    public function firstError(): ?string
+    {
+        return $this->validator->firstError();
+    }
 }

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Modern Tanzanian coastal lodge at sunset</title>
+  <desc id="desc">Original StayIn illustration of a premium lodge, palms and Indian Ocean inspired by Zanzibar and Tanzania.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#123B50"/><stop offset=".48" stop-color="#E58A4A"/><stop offset="1" stop-color="#F2D59D"/></linearGradient>
+    <linearGradient id="sea" x1="0" x2="1"><stop stop-color="#0C6B74"/><stop offset="1" stop-color="#62C3B1"/></linearGradient>
+    <linearGradient id="sand" x1="0" x2="1"><stop stop-color="#EAD8B2"/><stop offset="1" stop-color="#CDA66B"/></linearGradient>
+    <filter id="soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="18"/></filter>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#sky)"/>
+  <circle cx="1500" cy="260" r="130" fill="#FFD68B" opacity=".9" filter="url(#soft)"/>
+  <path d="M0 535 C300 485 545 560 850 520 C1130 485 1390 520 1920 455 L1920 1080 L0 1080Z" fill="url(#sea)"/>
+  <path d="M0 720 C360 650 710 740 1050 690 C1335 650 1600 675 1920 620 L1920 1080 L0 1080Z" fill="url(#sand)"/>
+  <path d="M0 610 C280 575 520 625 800 600 C1060 575 1380 610 1920 555" fill="none" stroke="#D9FFF3" stroke-width="10" opacity=".55"/>
+  <g transform="translate(250 435)">
+    <path d="M80 210 L270 55 L470 210 Z" fill="#5B371E"/>
+    <path d="M120 210 H430 V390 H120Z" fill="#F4EFE1"/>
+    <path d="M158 242 H248 V322 H158Z" fill="#163E4F" opacity=".9"/>
+    <path d="M304 242 H392 V390 H304Z" fill="#224D3C"/>
+    <path d="M95 390 H465" stroke="#7B4E2C" stroke-width="16" stroke-linecap="round"/>
+    <path d="M70 210 H490" stroke="#E0B35F" stroke-width="18" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(905 360)">
+    <path d="M0 310 L230 105 L460 310 Z" fill="#6F4524"/>
+    <path d="M45 310 H415 V525 H45Z" fill="#F8F2E5"/>
+    <path d="M92 354 H194 V445 H92Z" fill="#123B50"/>
+    <path d="M265 350 H365 V525 H265Z" fill="#174A3A"/>
+    <rect x="20" y="520" width="420" height="28" rx="14" fill="#7B4E2C"/>
+  </g>
+  <g fill="none" stroke-linecap="round">
+    <path d="M1640 720 C1628 590 1650 475 1710 365" stroke="#5B371E" stroke-width="24"/>
+    <path d="M1708 365 C1610 342 1565 292 1540 230 M1708 365 C1810 340 1865 300 1895 245 M1708 365 C1658 280 1665 205 1700 140 M1708 365 C1770 285 1785 210 1770 145" stroke="#174A3A" stroke-width="32"/>
+    <path d="M142 760 C132 632 160 520 235 400" stroke="#5B371E" stroke-width="20"/>
+    <path d="M235 400 C150 380 110 330 78 270 M235 400 C315 368 360 318 382 255 M235 400 C215 315 235 245 284 188" stroke="#1F6B4F" stroke-width="28"/>
+  </g>
+  <path d="M1220 770 C1315 720 1445 720 1545 770" fill="none" stroke="#fff" stroke-width="8" opacity=".7"/>
+</svg>

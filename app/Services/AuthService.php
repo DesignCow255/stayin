@@ -59,6 +59,21 @@ final class AuthService
         return $user === null ? [] : User::roles($user);
     }
 
+    /**
+     * Resolve the authenticated user's private landing page.
+     */
+    public static function home(?array $user = null): string
+    {
+        $user ??= self::user();
+        $role = (string) ($user['role'] ?? 'guest');
+
+        return match ($role) {
+            'super_admin', 'admin', 'support', 'finance' => '/admin',
+            'host' => '/host',
+            default => '/guest',
+        };
+    }
+
     public static function attempt(string $email, string $password, bool $remember = false): bool
     {
         $email = mb_strtolower(trim($email));

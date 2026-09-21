@@ -8,5 +8,5 @@
   </div>
   <h1 style="font-size:clamp(1.5rem,4vw,2.2rem);margin:0 0 var(--space-3)">503 — Temporarily unavailable</h1>
   <p class="text-muted" style="max-width:var(--container-narrow);margin-inline:auto;font-size:var(--text-lg)"><?= e($message) ?></p>
-  <a href="/" class="btn btn--primary btn--lg" style="margin-top:var(--space-5)"><i class="fa-solid fa-house" aria-hidden="true"></i> Return to StayIn</a>
+  <a href="<?= e(url('/')) ?>" class="btn btn--primary btn--lg" style="margin-top:var(--space-5)"><i class="fa-solid fa-house" aria-hidden="true"></i> Return to StayIn</a>
 </div>

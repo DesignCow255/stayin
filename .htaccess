@@ -1,17 +1,46 @@
-# ---------------------------------------------------------------------------
-# StayIn — deny all web access to this directory.
-#
-# This file is a second line of defence. The primary defence is deploying with
-# the Apache document root pointed at /public. See docs/DEPLOYMENT.md.
-# ---------------------------------------------------------------------------
+Options -Indexes
+DirectoryIndex index.php
 
-# Apache 2.4+
-<IfModule mod_authz_core.c>
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /stayin/
+
+    # ------------------------------------------------------------------
+    # Public assets
+    # ------------------------------------------------------------------
+
+    RewriteRule ^assets/(.*)$ public/assets/$1 [L]
+
+    RewriteRule ^favicon\.png$ public/favicon.png [L]
+    RewriteRule ^favicon\.ico$ public/favicon.ico [L]
+
+    RewriteRule ^manifest\.webmanifest$ public/manifest.webmanifest [L]
+    RewriteRule ^service-worker\.js$ public/service-worker.js [L]
+    RewriteRule ^offline\.html$ public/offline.html [L]
+
+    # ------------------------------------------------------------------
+    # Never expose sensitive application directories/files
+    # ------------------------------------------------------------------
+
+    RewriteRule ^(?:app|bootstrap|config|database|resources|routes|storage|vendor|tests|cli|docs)(?:/|$) - [F,L,NC]
+
+    RewriteRule ^(?:\.env|composer\.(?:json|lock)|phpunit\.xml|AGENTS\.md)$ - [F,L,NC]
+
+    # ------------------------------------------------------------------
+    # Existing root files/directories
+    # ------------------------------------------------------------------
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # ------------------------------------------------------------------
+    # Application routes
+    # ------------------------------------------------------------------
+
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>
+
+<FilesMatch "^\.">
     Require all denied
-</IfModule>
-
-# Apache 2.2
-<IfModule !mod_authz_core.c>
-    Order allow,deny
-    Deny from all
-</IfModule>
+</FilesMatch>

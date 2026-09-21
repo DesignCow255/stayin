@@ -1,4 +1,4 @@
-<?php use App\Core\View; View::start('content'); ?>
+<?php use App\Core\View; \App\Core\View::start('content'); ?>
 <section class="page-section"><div class="container">
   <h1>Help Centre</h1>
   <div class="prose">
@@ -11,4 +11,4 @@
     <p>Contact support@stayin.co.tz or WhatsApp us.</p>
   </div>
 </div></section>
-<?php View::stop() ?>
+<?php \App\Core\View::stop() ?>

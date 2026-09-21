@@ -14,10 +14,10 @@ final class EnsureHost implements MiddlewareInterface
 {
     public function handle(Request $request, callable $next): Response
     {
-        if (AuthService::anyRole(['host', 'admin', 'super_admin'])) {
+        if (AuthService::anyRole(['host']) && !AuthService::anyRole(['admin', 'super_admin', 'support', 'finance'])) {
             return $next($request);
         }
 
-        throw HttpException::forbidden('A host account is required for this area.');
+        throw HttpException::redirect(AuthService::home(), 'A host account is required for this area.');
     }
 }
