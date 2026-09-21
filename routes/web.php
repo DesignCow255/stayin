@@ -108,4 +108,4 @@ $router->post('/host/bookings/complete', 'HostController@complete')->middleware(
 $router->post('/admin/actions', 'AdminController@action')->middleware(['staff_auth','verified','admin']);
 $router->get('/admin/content', 'AdminController@content')->middleware(['staff_auth','verified','admin']);
 $router->post('/admin/content', 'AdminController@saveContent')->middleware(['staff_auth','verified','admin']);
-$router->get('/exports/bookings', 'ExportController@bookings')->middleware(['auth']);
+$router->get('/exports/bookings', 'ExportController@bookings')->middleware(['auth','verified']);
