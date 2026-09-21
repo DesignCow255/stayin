@@ -84,16 +84,32 @@ final class User
     {
         $roles = [(string) ($user['role'] ?? 'guest')];
 
-        try {
+        // Optional RBAC overrides. The legacy users.role column remains
+        // authoritative when the RBAC tables have not been installed.
+        $hasRoles = (bool) Database::scalar(
+            "SELECT COUNT(*) FROM information_schema.tables
+             WHERE table_schema = DATABASE()
+             AND table_name = 'roles'"
+        );
+
+        $hasUserRoles = (bool) Database::scalar(
+            "SELECT COUNT(*) FROM information_schema.tables
+             WHERE table_schema = DATABASE()
+             AND table_name = 'user_roles'"
+        );
+
+        if ($hasRoles && $hasUserRoles) {
             $extra = Database::select(
-                'SELECT r.`key` FROM `user_roles` ur JOIN `roles` r ON r.`id` = ur.`role_id` WHERE ur.`user_id` = ?',
+                'SELECT r.`key`
+                 FROM `user_roles` ur
+                 JOIN `roles` r ON r.`id` = ur.`role_id`
+                 WHERE ur.`user_id` = ?',
                 [(int) $user['id']]
             );
+
             foreach ($extra as $row) {
                 $roles[] = (string) $row['key'];
             }
-        } catch (\Throwable) {
-            // RBAC tables not migrated yet — the legacy `role` column is authoritative.
         }
 
         return array_values(array_unique($roles));

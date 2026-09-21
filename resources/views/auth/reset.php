@@ -12,7 +12,7 @@ use App\Core\View;
       <?php if (!empty($errors)): ?>
         <div class="alert alert--error" role="alert"><?= e(implode(' ', (array) $errors)) ?></div>
       <?php endif; ?>
-      <form method="POST" action="<?= e(url('/password/reset')) ?>" class="auth-form" data-validate>
+      <form method="POST" action="<?= e(url('/reset-password')) ?>" class="auth-form" data-validate>
         <input type="hidden" name="_token" value="<?= e($csrfToken) ?>">
         <input type="hidden" name="token" value="<?= e($token) ?>">
         <div class="form-group">

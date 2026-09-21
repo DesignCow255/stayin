@@ -33,7 +33,15 @@ View::start('content');
       <?php
       // CTA from the first active slide (if any), otherwise the default browse action.
       $slideCtaLink = !empty($slides[0]['cta_link']) ? (string) $slides[0]['cta_link'] : '/search';
-      $slideCtaLabel = $cta !== '' ? $cta : (app_locale() === 'sw' ? 'Fanya utafutishaji' : 'Find your stay');
+      $slideCtaLabel = !empty($slides[0])
+          ? (string) ($locale === 'sw'
+              ? ($slides[0]['cta_text_sw'] ?? '')
+              : ($slides[0]['cta_text_en'] ?? ''))
+          : '';
+
+      if ($slideCtaLabel === '') {
+          $slideCtaLabel = $locale === 'sw' ? 'Fanya utafutishaji' : 'Find your stay';
+      }
       ?>
       <a href="<?= e(url($slideCtaLink)) ?>" class="si-btn si-btn--primary si-hero__cta"<?= track('search_performed', ['surface' => 'hero_cta']) ?>><?= $slideCtaLabel === '' ? e(app_locale() === 'sw' ? 'Fanya utafutishaji' : 'Find your stay') : e($slideCtaLabel) ?><?= icon('arrow-right', 'si-icon--sm') ?></a>
       <?php if (!empty($slides)): ?>

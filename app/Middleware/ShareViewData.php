@@ -9,6 +9,7 @@ use App\Core\Csrf;
 use App\Core\MiddlewareInterface;
 use App\Core\Request;
 use App\Core\Response;
+use App\Core\Session;
 use App\Core\View;
 use App\Services\AuthService;
 
@@ -29,6 +30,7 @@ final class ShareViewData implements MiddlewareInterface
         View::share('csrfToken', Csrf::token());
         View::share('currentPath', $request->path());
         View::share('flashStatus', flash_status());
+        View::share('errors', Session::errors());
 
         return $next($request);
     }

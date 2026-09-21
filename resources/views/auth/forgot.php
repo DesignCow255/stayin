@@ -12,7 +12,7 @@ use App\Core\View;
       <?php if (!empty($errors)): ?>
         <div class="alert alert--error" role="alert"><?= e($errors[0] ?? 'An error occurred') ?></div>
       <?php endif; ?>
-      <form method="POST" action="<?= e(url('/password/forgot')) ?>" class="auth-form" data-validate>
+      <form method="POST" action="<?= e(url('/forgot-password')) ?>" class="auth-form" data-validate>
         <input type="hidden" name="_token" value="<?= e($csrfToken) ?>">
         <div class="form-group">
           <label for="email">Email</label>
