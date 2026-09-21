@@ -49,7 +49,6 @@ final class Analytics
         'favourite_toggled' => 'listing.favourite.toggled',
         'compare_added' => 'compare.property.added',
         'newsletter_subscribed' => 'newsletter.subscription.created',
-        'kyc_submitted' => 'kyc.document.submitted',
         'theme_toggled' => 'preferences.theme.toggled',
     ];
 

@@ -94,10 +94,8 @@ $router->post('/guest/privacy', 'GuestController@privacy')->middleware(['auth'])
 $router->get('/messages/{id}', 'MessageController@index')->middleware(['auth']);
 $router->post('/messages/{id}', 'MessageController@send')->middleware(['auth','throttle:api']);
 $router->post('/host/properties/{id}/actions', 'HostController@action')->middleware(['auth','verified','host']);
-$router->post('/host/kyc', 'HostController@kyc')->middleware(['auth','verified','host']);
 $router->post('/host/bookings/complete', 'HostController@complete')->middleware(['auth','verified','host']);
 $router->post('/admin/actions', 'AdminController@action')->middleware(['auth','verified','admin']);
-$router->get('/admin/kyc/{id}/document', 'AdminController@document')->middleware(['auth','verified','admin']);
 $router->get('/admin/content', 'AdminController@content')->middleware(['auth','verified','admin']);
 $router->post('/admin/content', 'AdminController@saveContent')->middleware(['auth','verified','admin']);
 $router->get('/exports/bookings', 'ExportController@bookings')->middleware(['auth']);

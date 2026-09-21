@@ -37,7 +37,6 @@ return [
         'hosts.manage' => 'Manage hosts and host accounts',
         'properties.view' => 'View all properties',
         'properties.moderate' => 'Verify, reject and suspend properties',
-        'kyc.review' => 'Review host KYC submissions',
         'bookings.view' => 'View all bookings',
         'bookings.manage' => 'Override and manage bookings',
         'payments.view' => 'View payment transactions',
@@ -64,14 +63,14 @@ return [
         'super_admin' => ['*'],
         'admin' => [
             'admin.access', 'users.view', 'users.manage', 'hosts.manage', 'properties.view',
-            'properties.moderate', 'kyc.review', 'bookings.view', 'bookings.manage', 'payments.view',
+            'properties.moderate', 'bookings.view', 'bookings.manage', 'payments.view',
             'payments.refund', 'finance.view', 'finance.manage', 'settlements.approve', 'reviews.moderate',
             'messages.moderate', 'promotions.manage', 'subscriptions.manage', 'newsletter.manage',
             'cms.manage', 'seo.manage', 'audit.view', 'system.health',
         ],
         'support' => [
             'admin.access', 'users.view', 'properties.view', 'bookings.view', 'reviews.moderate',
-            'messages.moderate', 'kyc.review', 'audit.view',
+            'messages.moderate', 'audit.view',
         ],
         'finance' => [
             'admin.access', 'payments.view', 'payments.refund', 'finance.view', 'finance.manage',

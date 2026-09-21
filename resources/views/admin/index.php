@@ -1,5 +1,5 @@
 <?php
-/** @var array $counts */ /** @var array $financials */ /** @var array $revenueTrend */ /** @var array $bookingStatuses */ /** @var array $propertyRegions */ /** @var array $propertyPerformance */ /** @var array $needsAttention */ /** @var array $payments */ /** @var array $kyc */ /** @var array $users */ /** @var array $audit */ /** @var array $rates */
+/** @var array $counts */ /** @var array $financials */ /** @var array $revenueTrend */ /** @var array $bookingStatuses */ /** @var array $propertyRegions */ /** @var array $propertyPerformance */ /** @var array $needsAttention */ /** @var array $payments */ /** @var array $users */ /** @var array $audit */ /** @var array $rates */
 use App\Core\View;
 use App\Services\AuthService;
 use App\Services\Gate;
@@ -9,7 +9,6 @@ $viewer = AuthService::user() ?? [];
 $role = (string) ($viewer['role'] ?? 'admin');
 $isSuper = $role === 'super_admin';
 $canProperties = $isSuper || Gate::allows('properties.view');
-$canKyc = $isSuper || Gate::allows('kyc.review');
 $canPayments = $isSuper || Gate::allows('payments.view');
 $canUsers = $isSuper || Gate::allows('users.view');
 $canAudit = $isSuper || Gate::allows('audit.view');
@@ -36,7 +35,6 @@ $statusTotal = max(1, array_sum(array_map(static fn($r) => (int)($r['total'] ?? 
         <span class="si-dashboard-nav__label">Operations</span>
         <a href="#properties"><?= icon('building') ?>Properties</a>
         <a href="#users"><?= icon('users') ?>Users</a>
-        <a href="#kyc"><?= icon('shield') ?>KYC & safety</a>
         <span class="si-dashboard-nav__label">Financial</span>
         <a href="#finance"><?= icon('credit-card') ?>Payments</a>
         <?php if ($canReports): ?><a href="<?= e(url('/exports/bookings')) ?>"><?= icon('download') ?>Export bookings</a><?php endif; ?>
@@ -50,7 +48,7 @@ $statusTotal = max(1, array_sum(array_map(static fn($r) => (int)($r['total'] ?? 
         <div class="si-dashboard-search" role="search"><?= icon('search') ?><input type="search" placeholder="Search users, properties, bookings…" aria-label="Dashboard search"><span class="si-command-kbd">⌘K</span></div>
         <div class="si-filter-pills" aria-label="Date range"><span class="is-active">30 Days</span><span>Quarter</span><span>Year</span></div>
       </div>
-      <nav class="si-mobile-section-nav" aria-label="Admin mobile sections"><a class="si-btn si-btn--outline si-btn--sm" href="#properties">Properties</a><a class="si-btn si-btn--outline si-btn--sm" href="#finance">Finance</a><a class="si-btn si-btn--outline si-btn--sm" href="#kyc">KYC</a></nav>
+      <nav class="si-mobile-section-nav" aria-label="Admin mobile sections"><a class="si-btn si-btn--outline si-btn--sm" href="#properties">Properties</a><a class="si-btn si-btn--outline si-btn--sm" href="#finance">Finance</a></nav>
 
       <header class="si-dashboard-hero">
         <div>
@@ -75,7 +73,7 @@ $statusTotal = max(1, array_sum(array_map(static fn($r) => (int)($r['total'] ?? 
         <section class="si-dash-panel"><div class="si-dash-panel__head"><div><h2>Booking performance</h2><p>Status distribution across all bookings.</p></div><span class="si-badge si-badge--info">Cancellation <?= e($rates['cancellation_rate'] ?? 0) ?>%</span></div><div class="si-dash-panel__body"><div class="si-meter-list"><?php foreach ($bookingStatuses as $s): $pct=((int)$s['total']/$statusTotal)*100; ?><div class="si-meter"><div class="si-meter__row"><span><?= e(ucfirst(str_replace('_',' ', $s['status'] ?? 'unknown'))) ?></span><strong><?= e($s['total'] ?? 0) ?></strong></div><div class="si-meter__track"><span class="si-meter__fill" style="--value:<?= e($pct) ?>%"></span></div></div><?php endforeach; ?></div></div></section>
       </div>
 
-      <section class="si-dash-panel"><div class="si-dash-panel__head"><div><h2>Needs attention</h2><p>Operational queue for verification, KYC and payment exceptions.</p></div></div><div class="si-dash-panel__body"><div class="si-attention-list"><?php if (empty($needsAttention)): ?><div class="si-empty si-empty--action"><h3>No urgent exceptions</h3><p>Moderation, KYC and payment exception queues are clear.</p></div><?php else: foreach ($needsAttention as $item): ?><article class="si-attention-item"><span class="si-priority-dot <?= ($item['priority'] ?? '') === 'Urgent' ? 'si-priority-dot--urgent' : '' ?>"></span><div><strong><?= e($item['title']) ?></strong><p class="si-caption" style="margin:.15rem 0 0"><?= e($item['label']) ?> · <?= e($item['meta']) ?> · <?= e($item['time']) ?></p></div><a class="si-btn si-btn--outline si-btn--sm" href="<?= e($item['href']) ?>"><?= e($item['action']) ?></a></article><?php endforeach; endif; ?></div></div></section>
+      <section class="si-dash-panel"><div class="si-dash-panel__head"><div><h2>Needs attention</h2><p>Operational queue for property verification and payment exceptions.</p></div></div><div class="si-dash-panel__body"><div class="si-attention-list"><?php if (empty($needsAttention)): ?><div class="si-empty si-empty--action"><h3>No urgent exceptions</h3><p>Property moderation and payment exception queues are clear.</p></div><?php else: foreach ($needsAttention as $item): ?><article class="si-attention-item"><span class="si-priority-dot <?= ($item['priority'] ?? '') === 'Urgent' ? 'si-priority-dot--urgent' : '' ?>"></span><div><strong><?= e($item['title']) ?></strong><p class="si-caption" style="margin:.15rem 0 0"><?= e($item['label']) ?> · <?= e($item['meta']) ?> · <?= e($item['time']) ?></p></div><a class="si-btn si-btn--outline si-btn--sm" href="<?= e($item['href']) ?>"><?= e($item['action']) ?></a></article><?php endforeach; endif; ?></div></div></section>
 
       <?php if ($canProperties): ?><section id="properties" class="si-dash-panel"><div class="si-dash-panel__head"><div><h2>Property performance</h2><p>Revenue, booking and trust indicators by property.</p></div><a class="si-btn si-btn--outline si-btn--sm" href="<?= e(url('/exports/bookings')) ?>"><?= icon('download','si-icon--sm') ?>Export</a></div><div class="si-table-wrap si-table-wrap--premium"><table class="si-table si-table--premium"><thead><tr><th>Property</th><th>Host</th><th>Location</th><th>Status</th><th class="si-table__num">Bookings</th><th class="si-table__num">Revenue</th><th class="si-table__num">Rating</th></tr></thead><tbody><?php foreach ($propertyPerformance as $p): ?><tr><td><strong><?= e($p['name']) ?></strong><br><span class="si-caption">#<?= e($p['id']) ?></span></td><td><?= e($p['host_name']) ?></td><td><?= e($p['region'] ?: '—') ?></td><td><span class="si-badge <?= ($p['status'] ?? '') === 'published' ? 'si-badge--premium' : (($p['status'] ?? '') === 'pending' ? 'si-badge--warning' : 'si-badge--outline') ?>"><?= e(ucfirst($p['status'] ?? 'unknown')) ?></span></td><td class="si-table__num"><?= e($p['bookings']) ?></td><td class="si-table__num"><?= format_money($p['revenue'], $p['currency']) ?></td><td class="si-table__num"><?= e($p['rating'] ?? '0.00') ?> ★</td></tr><?php endforeach; ?></tbody></table></div></section><?php endif; ?>
 

@@ -34,7 +34,6 @@ final class HostService {
  }
  public static function submit(int $id,int $host):void {
   self::property($id,$host);
-  if(!DB::scalar("SELECT user_id FROM host_kyc WHERE user_id=? AND status='verified'",[$host]))throw new BusinessException('Complete host identity verification before submitting a property.');
   if(!DB::scalar('SELECT id FROM property_images WHERE property_id=?',[$id])||!DB::scalar("SELECT id FROM room_types WHERE property_id=? AND status='active'",[$id]))throw new BusinessException('Add a property image and active room type first.');
   DB::update('properties',['status'=>'pending'],['id'=>$id]);
  }

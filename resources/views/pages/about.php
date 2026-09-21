@@ -9,8 +9,8 @@ use App\Core\View;
     <div class="prose">
       <h2>Our mission</h2>
       <p>StayIn connects travellers with distinctive, verified accommodations across Tanzania — from luxury lodges in Zanzibar to boutique guesthouses in the Serengeti.</p>
-      <h2>Verified hosts</h2>
-      <p>Every host is verified through our KYC process to ensure trust and quality.</p>
+      <h2>Quality stays</h2>
+      <p>Properties submitted to StayIn are reviewed through our listing moderation process before publication.</p>
       <h3>Contact</h3>
       <p>Email: support@stayin.co.tz | Phone: +255 000 000 000</p>
     </div>

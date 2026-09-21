@@ -20,7 +20,6 @@ return [
     'sms_notifications' => Env::bool('FEATURE_SMS_NOTIFICATIONS', false),
     'push_notifications' => Env::bool('FEATURE_PUSH_NOTIFICATIONS', false),
     'live_fx_rates' => Env::bool('FEATURE_LIVE_FX_RATES', false),
-    'host_kyc' => Env::bool('FEATURE_HOST_KYC', true),
     'property_verification' => Env::bool('FEATURE_PROPERTY_VERIFICATION', true),
     'reviews' => Env::bool('FEATURE_REVIEWS', true),
     'messaging' => Env::bool('FEATURE_MESSAGING', true),

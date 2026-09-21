@@ -1,5 +1,5 @@
 <?php
-/** @var array $properties */ /** @var array $bookings */ /** @var array $upcoming */ /** @var array $propertyPerformance */ /** @var array $availability */ /** @var array $statusMix */ /** @var array $revenueTrend */ /** @var array $balances */ /** @var array $settlements */ /** @var array $revenue */ /** @var array|null $kyc */
+/** @var array $properties */ /** @var array $bookings */ /** @var array $upcoming */ /** @var array $propertyPerformance */ /** @var array $availability */ /** @var array $statusMix */ /** @var array $revenueTrend */ /** @var array $balances */ /** @var array $settlements */ /** @var array $revenue */
 use App\Core\View;
 use App\Services\AuthService;
 View::start('content');
@@ -40,54 +40,6 @@ $availabilityTotal = max(1,array_sum(array_map(static fn($r)=>(int)($r['nights']
       <nav class="si-mobile-section-nav"><a class="si-btn si-btn--outline si-btn--sm" href="<?= e(url('/host/properties')) ?>">Properties</a><a class="si-btn si-btn--outline si-btn--sm" href="<?= e(url('/host/bookings')) ?>">Bookings</a><a class="si-btn si-btn--outline si-btn--sm" href="#payouts">Payouts</a></nav>
 
       <header class="si-dashboard-hero"><div><p class="si-eyebrow">Business overview</p><h1>Good morning, <?= e($hostName ?: 'Host') ?>.</h1><p>Here's how your properties are performing. Metrics come from your listings, bookings, availability, balances and settlements.</p></div><div class="si-filter-pills"><span class="is-active">All properties</span><?php foreach (array_slice($properties,0,3) as $p): ?><span><?= e($p['name']) ?></span><?php endforeach; ?></div></header>
-
-      <?php if (($kyc['status'] ?? '') !== 'verified'): ?>
-      <div class="si-alert si-alert--warning" style="align-items:center;justify-content:space-between;flex-wrap:wrap">
-        <div style="display:flex;gap:var(--si-space-3);align-items:flex-start">
-          <?= icon('shield') ?>
-          <div>
-            <strong>Host verification required</strong><br>
-            Submit or complete KYC verification before properties can be fully trusted in moderation workflows.
-            <?php if (($kyc['status'] ?? '') === 'pending'): ?><br><span class="si-caption">Your document is submitted and awaiting secure admin review.</span><?php endif; ?>
-          </div>
-        </div>
-        <a class="si-btn si-btn--primary si-btn--sm" href="#host-verification"><?= icon('shield', 'si-icon--sm') ?>Complete verification</a>
-      </div>
-      <?php endif; ?>
-
-      <?php if (($kyc['status'] ?? '') !== 'verified'): ?>
-      <section id="host-verification" class="si-dash-panel" aria-labelledby="host-verification-title">
-        <div class="si-dash-panel__head">
-          <div>
-            <h2 id="host-verification-title">Complete host verification</h2>
-            <p>Upload a clear photo/scan of your government ID or business registration document. Files are stored privately and reviewed by the StayIn trust team.</p>
-          </div>
-          <span class="si-badge <?= ($kyc['status'] ?? '') === 'pending' ? 'si-badge--warning' : (($kyc['status'] ?? '') === 'rejected' ? 'si-badge--danger' : 'si-badge--outline') ?>"><?= e(ucfirst($kyc['status'] ?? 'Not submitted')) ?></span>
-        </div>
-        <div class="si-dash-panel__body">
-          <?php if (empty($viewer['email_verified_at'])): ?>
-            <div class="si-empty si-empty--action" style="justify-items:start;text-align:start">
-              <h3>Verify your email first</h3>
-              <p>For your security, the platform requires email verification before identity documents can be submitted.</p>
-              <a class="si-btn si-btn--primary" href="<?= e(url('/verify-email')) ?>">Verify email</a>
-            </div>
-          <?php else: ?>
-            <form method="POST" action="<?= e(url('/host/kyc')) ?>" enctype="multipart/form-data" style="display:grid;gap:var(--si-space-4);max-width:720px">
-              <?= csrf_field() ?>
-              <label style="display:grid;gap:var(--si-space-2)">
-                <span class="si-eyebrow">Verification document</span>
-                <input type="file" name="document" accept="image/jpeg,image/png,image/webp" required aria-describedby="kyc-upload-help">
-                <span id="kyc-upload-help" class="si-caption">JPEG, PNG or WebP. Maximum 5 MB. Do not upload passwords, payment cards or unrelated personal files.</span>
-              </label>
-              <div class="si-filter-pills">
-                <button type="submit" class="si-btn si-btn--primary"><?= icon('shield', 'si-icon--sm') ?>Submit for verification</button>
-                <span>Secure review required before status becomes verified</span>
-              </div>
-            </form>
-          <?php endif; ?>
-        </div>
-      </section>
-      <?php endif; ?>
 
       <div class="si-kpi-grid">
         <article class="si-kpi-card"><div class="si-kpi-card__top"><span class="si-kpi-card__label">Revenue</span><?= icon('wallet') ?></div><strong class="si-kpi-card__value"><?= format_money($totalRevenue,$primaryCurrency) ?></strong><span class="si-kpi-card__meta">Paid/refunded stays</span></article>
