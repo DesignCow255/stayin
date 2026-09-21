@@ -74,6 +74,11 @@ $router->get('/control/login', 'ControlAuthController@showLogin', 'control.login
 $router->post('/control/login', 'ControlAuthController@login', 'control.login.attempt')->middleware(['throttle:login']);
 $router->post('/control/logout', 'ControlAuthController@logout', 'control.logout')->middleware(['staff_auth','admin']);
 
+// Super administrator account management.
+$router->get('/control/accounts', 'ControlAccountController@index', 'control.accounts')->middleware(['staff_auth','verified','admin']);
+$router->get('/control/accounts/create', 'ControlAccountController@create', 'control.accounts.create')->middleware(['staff_auth','verified','admin']);
+$router->post('/control/accounts', 'ControlAccountController@store', 'control.accounts.store')->middleware(['staff_auth','verified','admin']);
+
 // --- Admin control centre ---------------------------------------------------
 $router->group(['prefix' => '/admin', 'middleware' => ['staff_auth','verified','admin']], static function (App\Core\Router $router): void {
     $router->get('', 'AdminController@index', 'admin.dashboard');
