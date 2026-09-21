@@ -17,7 +17,7 @@ final class CheckMaintenanceMode implements MiddlewareInterface
         }
 
         // Admin, health and asset paths remain reachable for operators.
-        foreach (['/admin', '/health', '/assets/'] as $prefix) {
+        foreach (['/admin', '/control', '/health', '/assets/'] as $prefix) {
             if (str_starts_with($request->path(), $prefix)) {
                 return $next($request);
             }

@@ -40,7 +40,7 @@ $statusTotal = max(1, array_sum(array_map(static fn($r) => (int)($r['total'] ?? 
         <?php if ($canReports): ?><a href="<?= e(url('/exports/bookings')) ?>"><?= icon('download') ?>Export bookings</a><?php endif; ?>
         <?php if ($canCms): ?><a href="<?= e(url('/admin/content')) ?>"><?= icon('images') ?>Content studio</a><?php endif; ?>
       </nav>
-      <form method="POST" action="<?= e(url('/logout')) ?>"><?= csrf_field() ?><button class="si-btn si-btn--outline si-btn--block" type="submit"><?= icon('log-out') ?>Sign out</button></form>
+      <form method="POST" action="<?= e(url('/control/logout')) ?>"><?= csrf_field() ?><button class="si-btn si-btn--outline si-btn--block" type="submit"><?= icon('log-out') ?>Sign out</button></form>
     </aside>
 
     <div class="si-dashboard-main">

@@ -69,8 +69,13 @@ $router->group(['prefix' => '/host', 'middleware' => ['auth','verified','host']]
     $router->get('/bookings', 'HostController@index', 'host.bookings');
 });
 
+// --- Administrative authentication ------------------------------------------
+$router->get('/control/login', 'ControlAuthController@showLogin', 'control.login');
+$router->post('/control/login', 'ControlAuthController@login', 'control.login.attempt')->middleware(['throttle:login']);
+$router->post('/control/logout', 'ControlAuthController@logout', 'control.logout')->middleware(['staff_auth','admin']);
+
 // --- Admin control centre ---------------------------------------------------
-$router->group(['prefix' => '/admin', 'middleware' => ['auth','verified','admin']], static function (App\Core\Router $router): void {
+$router->group(['prefix' => '/admin', 'middleware' => ['staff_auth','verified','admin']], static function (App\Core\Router $router): void {
     $router->get('', 'AdminController@index', 'admin.dashboard');
 });
 
@@ -95,7 +100,7 @@ $router->get('/messages/{id}', 'MessageController@index')->middleware(['auth']);
 $router->post('/messages/{id}', 'MessageController@send')->middleware(['auth','throttle:api']);
 $router->post('/host/properties/{id}/actions', 'HostController@action')->middleware(['auth','verified','host']);
 $router->post('/host/bookings/complete', 'HostController@complete')->middleware(['auth','verified','host']);
-$router->post('/admin/actions', 'AdminController@action')->middleware(['auth','verified','admin']);
-$router->get('/admin/content', 'AdminController@content')->middleware(['auth','verified','admin']);
-$router->post('/admin/content', 'AdminController@saveContent')->middleware(['auth','verified','admin']);
+$router->post('/admin/actions', 'AdminController@action')->middleware(['staff_auth','verified','admin']);
+$router->get('/admin/content', 'AdminController@content')->middleware(['staff_auth','verified','admin']);
+$router->post('/admin/content', 'AdminController@saveContent')->middleware(['staff_auth','verified','admin']);
 $router->get('/exports/bookings', 'ExportController@bookings')->middleware(['auth']);

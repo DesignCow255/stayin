@@ -31,6 +31,7 @@ return [
     'robots' => [
         'disallow' => [
             '/admin',
+            '/control',
             '/host/',
             '/guest/',
             '/checkout',

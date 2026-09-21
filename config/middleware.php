@@ -11,6 +11,7 @@ return [
     'aliases' => [
         'guest' => App\Middleware\RedirectIfAuthenticated::class,
         'auth' => App\Middleware\Authenticate::class,
+        'staff_auth' => App\Middleware\AuthenticateStaff::class,
         'verified' => App\Middleware\EnsureEmailVerified::class,
         'csrf' => App\Middleware\VerifyCsrfToken::class,
         'role' => App\Middleware\EnsureRole::class,

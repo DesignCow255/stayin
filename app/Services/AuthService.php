@@ -96,6 +96,15 @@ final class AuthService
             return false;
         }
 
+        // Public authentication is strictly for guest and host accounts.
+        // Privileged staff must authenticate through /control/login.
+        if (!in_array((string) ($user['role'] ?? ''), ['guest', 'host'], true)) {
+            Logger::warning('auth.public_login_rejected_role', [
+                'user_id' => (int) $user['id'],
+            ]);
+            return false;
+        }
+
         // Transparent rehash when the algorithm/cost has changed.
         if (password_needs_rehash((string) $user['password_hash'], self::algo(), self::options())) {
             User::update((int) $user['id'], ['password_hash' => password_hash($password, self::algo(), self::options())]);
@@ -105,6 +114,68 @@ final class AuthService
         self::clearFailures($email);
 
         Logger::info('auth.login', ['user_id' => (int) $user['id']]);
+
+        return true;
+    }
+
+    /**
+     * Authenticate privileged staff without ever establishing a guest/host
+     * session through the administrative login endpoint.
+     */
+    public static function attemptStaff(string $email, string $password): bool
+    {
+        $email = mb_strtolower(trim($email));
+
+        if (self::isLockedOut($email)) {
+            return false;
+        }
+
+        $user = User::findByEmail($email);
+
+        if ($user === null || ($user['password_hash'] ?? null) === null
+            || !password_verify($password, (string) $user['password_hash'])
+        ) {
+            self::recordFailure($email, $user);
+            return false;
+        }
+
+        if (($user['status'] ?? '') !== 'active') {
+            Logger::warning('auth.staff_login_blocked_status', [
+                'user_id' => (int) $user['id'],
+                'status' => $user['status'],
+            ]);
+            return false;
+        }
+
+        if (!in_array((string) ($user['role'] ?? ''), ['admin', 'super_admin'], true)) {
+            self::recordFailure($email, $user);
+            Logger::warning('auth.staff_login_rejected_role', [
+                'user_id' => (int) $user['id'],
+            ]);
+            return false;
+        }
+
+        if (password_needs_rehash(
+            (string) $user['password_hash'],
+            self::algo(),
+            self::options()
+        )) {
+            User::update((int) $user['id'], [
+                'password_hash' => password_hash(
+                    $password,
+                    self::algo(),
+                    self::options()
+                ),
+            ]);
+        }
+
+        self::login((int) $user['id']);
+        self::clearFailures($email);
+
+        Logger::info('auth.staff_login', [
+            'user_id' => (int) $user['id'],
+            'role' => (string) $user['role'],
+        ]);
 
         return true;
     }

@@ -24,6 +24,7 @@ $isHost = in_array('host', $authRoles, true);
 $isAdmin = count(array_intersect(['admin', 'super_admin', 'support', 'finance'], $authRoles)) > 0;
 $roleHome = $isAdmin ? '/admin' : ($isHost ? '/host' : '/guest');
 $roleLabel = $isAdmin ? 'Admin profile' : ($isHost ? 'Host profile' : 'Guest profile');
+$logoutPath = $isAdmin ? '/control/logout' : '/logout';
 
 $csrfToken = $csrfToken ?? '';
 $flashStatus = $flashStatus ?? null;
@@ -89,9 +90,6 @@ if ($isAuthenticated) {
       <?php if ($isHost): ?>
       <a href="<?= e(url('/host')) ?>" class="si-nav__link"<?= str_starts_with($currentPath, '/host') ? ' aria-current="page"' : '' ?>>Host</a>
       <?php endif; ?>
-      <?php if ($isAdmin): ?>
-      <a href="<?= e(url('/admin')) ?>" class="si-nav__link"<?= str_starts_with($currentPath, '/admin') ? ' aria-current="page"' : '' ?>>Admin</a>
-      <?php endif; ?>
     </nav>
     <div class="si-header__actions">
       <a href="<?= e(url('/search')) ?>" class="si-icon-btn" aria-label="Search stays"><?= icon('search', 'si-icon--lg') ?></a>
@@ -101,7 +99,7 @@ if ($isAuthenticated) {
       <a href="<?= e(url('/guest#notifications')) ?>" class="si-icon-btn" aria-label="Notifications<?= $unreadCount > 0 ? ', ' . $unreadCount . ' unread' : '' ?>"><?= icon('bell', 'si-icon--lg') ?><?php if ($unreadCount > 0): ?><span class="si-icon-btn__count" aria-hidden="true"><?= e($unreadCount > 99 ? '99+' : (string) $unreadCount) ?></span><?php endif; ?></a>
       <?php endif; ?>
       <a href="<?= e(url($roleHome)) ?>" class="si-icon-btn" aria-label="<?= e($roleLabel) ?>"><span class="si-avatar" aria-hidden="true"><?= e($viewerInitials) ?></span></a>
-      <form method="POST" action="<?= e(url('/logout')) ?>" class="si-header__cta" aria-label="Sign out" style="display:inline-flex">
+      <form method="POST" action="<?= e(url($logoutPath)) ?>" class="si-header__cta" aria-label="Sign out" style="display:inline-flex">
         <?= csrf_field() ?>
         <button type="submit" class="si-btn si-btn--outline si-btn--sm"><?= icon('log-out', 'si-icon--sm') ?>Sign out</button>
       </form>
@@ -161,7 +159,7 @@ if ($isAuthenticated) {
       <a href="<?= e(url('/register')) ?>" class="si-btn si-btn--primary si-btn--block">List your property</a>
       <?php endif; ?>
       <?php if ($isAuthenticated): ?>
-      <form method="POST" action="<?= e(url('/logout')) ?>" aria-label="Sign out">
+      <form method="POST" action="<?= e(url($logoutPath)) ?>" aria-label="Sign out">
         <?= csrf_field() ?>
         <button type="submit" class="si-btn si-btn--outline si-btn--block"><?= icon('log-out') ?> Sign out</button>
       </form>
@@ -183,7 +181,7 @@ if ($isAuthenticated) {
   <a href="<?= e(url('/search')) ?>" class="si-tabbar__item"<?= $currentPath === '/search' ? ' aria-current="page"' : '' ?>><?= icon('search') ?><span>Explore</span></a>
   <a href="<?= e(url('/guest/favourites')) ?>" class="si-tabbar__item"<?= str_starts_with($currentPath, '/guest/favourites') ? ' aria-current="page"' : '' ?>><?= icon('heart') ?><span>Saved</span><?php if ($savedCount > 0): ?><span class="si-tabbar__count" aria-hidden="true"><?= e($savedCount > 99 ? '99+' : (string) $savedCount) ?></span><?php endif; ?></a>
   <?php endif; ?>
-  <form method="POST" action="<?= e(url('/logout')) ?>" class="si-tabbar__item" aria-label="Sign out">
+  <form method="POST" action="<?= e(url($logoutPath)) ?>" class="si-tabbar__item" aria-label="Sign out">
     <?= csrf_field() ?>
     <button type="submit" style="all:unset;display:grid;place-items:center;gap:.125rem;cursor:pointer"><?= icon('log-out') ?><span>Sign out</span></button>
   </form>
